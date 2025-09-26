@@ -1,6 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 import "./Navbar.css";
+
+let isLoggedIn = false; // This should be replaced with actual authentication logic
 
 const Navbar = () => {
   return (
@@ -13,13 +16,13 @@ const Navbar = () => {
           <Link to="/">Home</Link>
         </li>
         <li>
-          <Link to="/leaderboard">Leaderboard</Link>
+          <Link to={isLoggedIn ? "/leaderboard" : "/login"}>Leaderboard</Link>
         </li>
         <li>
-          <Link to="/practice">Practice</Link>
+          <Link to={isLoggedIn ? "/practice" : "/login"}>Practice</Link>
         </li>
         <li>
-          <Link to="/profile">Profile</Link>
+          <Link to={isLoggedIn ? "/profile" : "/login"}>Profile</Link>
         </li>
       </ul>
       <div className="navbar-auth">

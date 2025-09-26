@@ -8,13 +8,40 @@ import "./App.css"; // Create this file if it doesn't exist
 import Profile from "./pages/Profile";
 import Practice from "./pages/Practice";
 import Match from "./pages/Match";
+import { initializeApp } from "firebase/app";
 
+import ReactDOM from "react-dom";
+import { AuthProvider } from "./context/AuthContext";
+
+import { getAnalytics } from "firebase/analytics";
+import { useState } from 'react'
+
+import {
+  GoogleAuthProvider,
+  GithubAuthProvider,
+  connectAuthEmulator,
+  getAuth,
+  onAuthStateChanged,
+  signInWithPopup,
+  signOut,
+} from 'firebase/auth';
 
 function App() {
+
+  console.log(import.meta.env.VITE_apiKey)
+
+
+
+
+
+
+
+
 
 
   
   return (
+    <AuthProvider>
     <Router>
       <div className="app-container"> {/* Add this wrapper */}
         <Routes>
@@ -31,6 +58,7 @@ function App() {
         </Routes>
       </div>
     </Router>
+    </AuthProvider>
   );
 }
 
