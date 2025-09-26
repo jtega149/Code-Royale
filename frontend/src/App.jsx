@@ -7,6 +7,7 @@ import Leaderboard from "./pages/Leaderboard";
 import "./App.css"; // Create this file if it doesn't exist
 import Profile from "./pages/Profile";
 import Practice from "./pages/Practice";
+import Match from "./pages/Match";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
           <Route path="/leaderboard" element={<Leaderboard />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/practice" element={<Practice />} />
+          <Route path="/match" element={<Match />} />
         </Routes>
       </div>
     </Router>
