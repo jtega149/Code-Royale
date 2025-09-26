@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 .home-container {
   width: 100%;
   min-height: 100vh;
@@ -39,10 +40,83 @@
   font-weight: 600;
   border: none;
   border-radius: 5px;
+=======
+/* Reset & basics */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* Make sure homepage container fills the full screen */
+.home-container,
+.homepage {
+  width: 100vw;
+  height: 100%;
+  min-height: 100vh; /* fallback for mobile */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  font-family: "Segoe UI", sans-serif;
+  color: white;
+}
+
+/* Overlay */
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.55); /* dark overlay */
+  z-index: 1;
+}
+
+/* Content */
+.content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+}
+
+.game-title {
+  font-size: 4rem;
+  font-weight: bold;
+  letter-spacing: 3px;
+}
+
+.tagline {
+  margin: 1rem 0 2rem;
+  font-size: 1.5rem;
+  color: #ddd;
+}
+
+/* Buttons */
+.buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+.btn {
+  padding: 0.75rem 2rem;
+  font-size: 1.2rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 12px;
+>>>>>>> Stashed changes
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
+<<<<<<< Updated upstream
 /* Start Match Button */
 .start-match-btn {
   background-color: #23a2f6;
@@ -62,3 +136,22 @@
 .practice-btn:hover {
   background-color: #ff512f;
 }
+=======
+.btn.play {
+  background: #00bcd4;
+  color: #fff;
+}
+
+.btn.play:hover {
+  background: #0097a7;
+}
+
+.btn.about {
+  background: #fff;
+  color: #333;
+}
+
+.btn.about:hover {
+  background: #ddd;
+}
+>>>>>>> Stashed changes
