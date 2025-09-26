@@ -1,0 +1,158 @@
+.profile-container {
+  width: 90%;
+  max-width: 1000px;
+  margin: 120px auto 50px auto;
+  color: #fff; /* ensures text is visible */
+  padding-bottom: 30px;
+}
+
+/* Profile Header */
+.profile-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 40px;
+}
+
+.profile-pic {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #f09819;
+  margin-bottom: 20px;
+}
+
+.profile-header h1 {
+  font-size: 36px;
+  margin-bottom: 10px;
+}
+
+.edit-profile-button {
+  padding: 10px 20px;
+  background-color: #23a2f6;
+  border: none;
+  border-radius: 5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.edit-profile-button:hover {
+  background-color: #1845ad;
+}
+
+/* Stats Section */
+.profile-stats {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 40px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.05);
+  padding: 20px 30px;
+  border-radius: 10px;
+  text-align: center;
+  min-width: 120px;
+  transition: transform 0.2s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+}
+
+.stat-card h3 {
+  font-size: 16px;
+  margin-bottom: 8px;
+  color: #f09819;
+}
+
+.stat-card p {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+/* Section Titles */
+.section-title {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: #23a2f6;
+  text-align: center;
+}
+
+/* Recent Matches */
+.recent-matches {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 40px;
+}
+
+.match-card {
+  background: rgba(255,255,255,0.05);
+  padding: 15px 20px;
+  border-radius: 10px;
+  width: 200px;
+  text-align: center;
+  transition: transform 0.2s ease;
+}
+
+.match-card:hover {
+  transform: translateY(-5px);
+}
+
+.match-card.win {
+  border: 2px solid #23a2f6;
+}
+
+.match-card.loss {
+  border: 2px solid #ff512f;
+}
+
+/* Lists */
+.languages-used ul,
+.solved-problems ul,
+.friends-list ul {
+  list-style: none;
+  padding-left: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 40px;
+}
+
+.languages-used li,
+.solved-problems li,
+.friends-list li {
+  background: rgba(255,255,255,0.05);
+  padding: 10px 15px;
+  border-radius: 8px;
+  transition: transform 0.2s ease;
+}
+
+.languages-used li:hover,
+.solved-problems li:hover,
+.friends-list li:hover {
+  transform: translateY(-3px);
+}
+
+/* Badges */
+.badges {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+/* Entire page background */
+body {
+  background: linear-gradient(to right, #080710, #1a1a2e);
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
+  color: #fff;
+}

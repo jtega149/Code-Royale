@@ -1,0 +1,56 @@
+.leaderboard-container {
+  width: 100%;
+  min-height: 100vh;
+  background: linear-gradient(to right, #080710, #1a1a2e);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.leaderboard-content {
+  margin-top: 120px; /* spacing for navbar */
+  width: 90%;
+  max-width: 800px;
+  text-align: center;
+}
+
+.leaderboard-content h1 {
+  font-size: 42px;
+  font-weight: 700;
+  margin-bottom: 30px;
+  color: #f09819; /* accent color */
+}
+
+/* Table styling */
+.leaderboard-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  overflow: hidden;
+  font-size: 16px;
+}
+
+.leaderboard-table th,
+.leaderboard-table td {
+  padding: 15px;
+  text-align: center;
+}
+
+.leaderboard-table thead {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.leaderboard-table tbody tr {
+  transition: background-color 0.3s ease;
+}
+
+.leaderboard-table tbody tr:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.leaderboard-table th {
+  font-weight: 600;
+  color: #fff;
+}

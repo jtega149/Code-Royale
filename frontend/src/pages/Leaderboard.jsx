@@ -1,24 +1,42 @@
-import React from 'react';
+import React from "react";
+import Navbar from "../components/Navbar";
+import "./Leaderboard.css";
 
 const Leaderboard = () => {
-  // You’ll later fetch users and sort by trophies
+  // Example leaderboard data
   const players = [
-    { name: 'Alice', trophies: 120 },
-    { name: 'Bob', trophies: 95 },
-    { name: 'Charlie', trophies: 80 },
+    { rank: 1, name: "Alice", trophies: 1200, wins: 25 },
+    { rank: 2, name: "Bob", trophies: 1100, wins: 20 },
+    { rank: 3, name: "Charlie", trophies: 950, wins: 18 },
+    { rank: 4, name: "David", trophies: 900, wins: 15 },
   ];
 
   return (
-    <div className="flex flex-col items-center min-h-screen bg-gray-100 p-6">
-      <h1 className="text-3xl font-bold mb-6">Leaderboard</h1>
-      <ul className="w-full max-w-md">
-        {players.map((player, index) => (
-          <li key={index} className="flex justify-between p-2 mb-2 bg-white rounded shadow">
-            <span>{player.name}</span>
-            <span>{player.trophies} 🏆</span>
-          </li>
-        ))}
-      </ul>
+    <div className="leaderboard-container">
+      <Navbar />
+      <div className="leaderboard-content">
+        <h1>Leaderboard</h1>
+        <table className="leaderboard-table">
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Player</th>
+              <th>Trophies</th>
+              <th>Wins</th>
+            </tr>
+          </thead>
+          <tbody>
+            {players.map((player) => (
+              <tr key={player.rank}>
+                <td>{player.rank}</td>
+                <td>{player.name}</td>
+                <td>{player.trophies}</td>
+                <td>{player.wins}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

@@ -5,6 +5,8 @@ import Signup from "./components/Signup";
 import Home from "./pages/Home";
 import Leaderboard from "./pages/Leaderboard";
 import "./App.css"; // Create this file if it doesn't exist
+import Profile from "./pages/Profile";
+import Practice from "./pages/Practice";
 
 function App() {
   return (
@@ -18,6 +20,8 @@ function App() {
           {/* Main app pages (can include navbar later) */}
           <Route path="/" element={<Home />} />
           <Route path="/leaderboard" element={<Leaderboard />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/practice" element={<Practice />} />
         </Routes>
       </div>
     </Router>
