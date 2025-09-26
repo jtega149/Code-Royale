@@ -1,46 +1,3 @@
-<<<<<<< Updated upstream
-.home-container {
-  width: 100%;
-  min-height: 100vh;
-  background: linear-gradient(to right, #080710, #1a1a2e);
-  color: #fff;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.home-content {
-  margin-top: 120px; /* give space for navbar */
-  text-align: center;
-}
-
-.home-content h1 {
-  font-size: 48px;
-  font-weight: 700;
-  margin-bottom: 20px;
-  color: #f09819; /* accent color */
-}
-
-.home-content p {
-  font-size: 18px;
-  margin-bottom: 40px;
-  color: #ffffffcc;
-}
-
-.home-buttons {
-  display: flex;
-  gap: 20px;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-
-.home-buttons button {
-  padding: 12px 25px;
-  font-size: 16px;
-  font-weight: 600;
-  border: none;
-  border-radius: 5px;
-=======
 /* Reset & basics */
 * {
   margin: 0;
@@ -54,12 +11,11 @@ html, body, #root {
   padding: 0;
 }
 
-/* Make sure homepage container fills the full screen */
-.home-container,
+/* Homepage container fills full viewport */
 .homepage {
   width: 100vw;
   height: 100%;
-  min-height: 100vh; /* fallback for mobile */
+  min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -68,18 +24,18 @@ html, body, #root {
   color: white;
 }
 
-/* Overlay */
+/* Overlay for darkening background */
 .overlay {
   position: absolute;
   top: 0;
   left: 0;
   height: 100%;
   width: 100%;
-  background: rgba(0, 0, 0, 0.55); /* dark overlay */
+  background: rgba(0, 0, 0, 0.55);
   z-index: 1;
 }
 
-/* Content */
+/* Content on top of overlay */
 .content {
   position: relative;
   z-index: 2;
@@ -98,60 +54,45 @@ html, body, #root {
   color: #ddd;
 }
 
-/* Buttons */
+/* Buttons container */
 .buttons {
   display: flex;
   justify-content: center;
   gap: 1.5rem;
+  flex-wrap: wrap;
 }
 
+/* Base button style */
 .btn {
   padding: 0.75rem 2rem;
   font-size: 1.2rem;
   font-weight: bold;
   border: none;
   border-radius: 12px;
->>>>>>> Stashed changes
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
-<<<<<<< Updated upstream
-/* Start Match Button */
-.start-match-btn {
+/* Start Match button */
+.start-match-btn,
+.btn.play {
   background-color: #23a2f6;
   color: #fff;
 }
 
-.start-match-btn:hover {
+.start-match-btn:hover,
+.btn.play:hover {
   background-color: #1845ad;
 }
 
-/* Practice Button */
-.practice-btn {
+/* Practice / About button */
+.practice-btn,
+.btn.about {
   background-color: #f09819;
   color: #fff;
 }
 
-.practice-btn:hover {
+.practice-btn:hover,
+.btn.about:hover {
   background-color: #ff512f;
 }
-=======
-.btn.play {
-  background: #00bcd4;
-  color: #fff;
-}
-
-.btn.play:hover {
-  background: #0097a7;
-}
-
-.btn.about {
-  background: #fff;
-  color: #333;
-}
-
-.btn.about:hover {
-  background: #ddd;
-}
->>>>>>> Stashed changes
