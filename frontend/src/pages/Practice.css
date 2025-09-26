@@ -1,0 +1,138 @@
+/* Base page */
+.practice-page {
+  font-family: "Segoe UI", sans-serif;
+  color: white;
+  background-color: #0d1b2a;
+  min-height: 100vh;
+}
+
+/* Content wrapper */
+.content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+/* Professional options */
+.professional-options h2,
+.professional-options h3 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Option cards */
+.option-cards {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.option-card {
+  background-color: #112d4e;
+  padding: 20px 40px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-align: center;
+  min-width: 120px;
+}
+
+.option-card:hover {
+  background-color: #1c4770;
+}
+
+.option-card.selected {
+  border: 2px solid #ff512f;
+  transform: scale(1.05);
+}
+
+/* Difficulty-specific selected borders */
+.option-card.easy.selected { border-color: #23a2f6; }
+.option-card.medium.selected { border-color: #f0a500; }
+.option-card.hard.selected { border-color: #ff512f; }
+
+/* Run button */
+.btn.run-btn {
+  background-color: #23a2f6;
+  color: white;
+  padding: 10px 30px;
+  font-size: 1.1rem;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn.run-btn:hover {
+  background-color: #1845ad;
+}
+
+/* Practice header */
+.practice-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+/* Timer colors */
+.timer-yellow {
+  color: #f0a500;
+}
+.timer-red {
+  color: #ff512f;
+}
+@keyframes flashRed {
+  0% { color: #ff0000; }
+  50% { color: #800000; }
+  100% { color: #ff0000; }
+}
+.timer-flash {
+  animation: flashRed 1s infinite;
+}
+
+/* Practice body layout */
+.practice-body {
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+/* Question panel */
+.practice-question {
+  flex: 1 1 400px;
+  background-color: #112d4e;
+  padding: 30px;
+  border-radius: 12px;
+  min-width: 300px;
+}
+
+/* Editor panel */
+.practice-editor {
+  flex: 1 1 500px;
+  display: flex;
+  flex-direction: column;
+  min-width: 400px;
+}
+
+/* CodeMirror editor overrides */
+.cm-editor {
+  font-family: "Fira Code", monospace;
+  font-size: 16px;
+  height: 500px;
+}
+
+/* Output panel */
+.output-panel {
+  background-color: #0b1a2a;
+  padding: 15px;
+  border-radius: 12px;
+  color: #00ff99;
+  min-height: 80px;
+  font-family: "Fira Code", monospace;
+  overflow-y: auto;
+  margin-top: 10px;
+}

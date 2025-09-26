@@ -11,6 +11,10 @@ export default function Home() {
     navigate("/match");
   };
 
+  const goToPractice = () => {
+    navigate("/practice");
+  };
+
   return (
     <div className="homepage">
       {/* Navbar stays at the top */}
@@ -36,7 +40,9 @@ export default function Home() {
             <button className="btn play" onClick={goToMatch}>
               Start a Match
             </button>
-            <button className="btn about">Practice Problems</button>
+            <button className="btn about" onClick={goToPractice}>
+              Practice Problems
+            </button>
           </div>
         </div>
       </section>
