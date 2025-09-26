@@ -1,5 +1,5 @@
 import React from "react";
-import "./Login.css";
+import "./Styles/Login.css";
 
 // Needs to be moved to the root 
 import { initializeApp } from "firebase/app";

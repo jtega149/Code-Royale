@@ -1,7 +1,7 @@
 import React from "react";
 import Navbar from "../components/Navbar";
 import { FaGlobe, FaUserFriends, FaBook, FaSearch, FaLayerGroup, FaTrophy } from "react-icons/fa";
-import "./Match.css";
+import "./Styles/Match.css";
 
 const Match = () => {
   const matchOptions = [

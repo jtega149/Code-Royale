@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom"; 
 import Navbar from "../components/Navbar";
-import "./Home.css";
+import "./Styles/Home.css";
 import background from "../Photos/HP_bkg.png";
 
 export default function Home() {
