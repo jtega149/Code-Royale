@@ -1,7 +1,7 @@
 import React from "react";
 import Navbar from "../components/Navbar";
 import "./Home.css";
-import background from "../Photos/HP_bkg.png"; // correct relative path
+import background from "../Photos/HP_bkg.png";
 
 export default function Home() {
   return (
@@ -14,7 +14,8 @@ export default function Home() {
         backgroundSize: "cover",
       }}
     >
-      <Navbar />
+      {/* Fixed Navbar */}
+      <Navbar className="fixed-navbar" />
 
       {/* Overlay */}
       <div className="overlay" />
