@@ -1,6 +1,6 @@
 import React from "react";
 import Navbar from "../components/Navbar";
-import "./Leaderboard.css";
+import "./Styles/Leaderboard.css";
 
 const Leaderboard = () => {
   // Example leaderboard data

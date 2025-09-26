@@ -1,7 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
+<<<<<<< HEAD
 import { useAuth } from "../context/AuthContext";
 import "./Navbar.css";
+=======
+import "./Styles/Navbar.css";
+>>>>>>> 2b507b6719093cdeb31daaff495e14e29a726b46
 
 let isLoggedIn = false; // This should be replaced with actual authentication logic
 
