@@ -1,13 +1,9 @@
 import React from "react";
-<<<<<<< HEAD
 import "./Login.css";
 import { useState } from 'react';
 import { useAuth } from "../context/AuthContext";
 
 
-=======
-import "./Styles/Login.css";
->>>>>>> 2b507b6719093cdeb31daaff495e14e29a726b46
 
 // Needs to be moved to the root 
 
