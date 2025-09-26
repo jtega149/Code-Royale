@@ -1,0 +1,442 @@
+{
+    "Hard": {
+        "Median of Two Sorted Arrays": {
+            "name": "Median of Two Sorted Arrays",
+            "description": "Given two sorted arrays nums1 and nums2 of size m and n respectively, return the median of the two sorted arrays.\n\nThe overall run time complexity should be O(log (m+n)).\n\nExample 1:\n\nInput: nums1 = [1,3], nums2 = [2]\nOutput: 2.00000\nExplanation: merged array = [1,2,3] and median is 2.\n\nExample 2:\n\nInput: nums1 = [1,2], nums2 = [3,4]\nOutput: 2.50000\nExplanation: merged array = [1,2,3,4] and median is (2 + 3) / 2 = 2.5.\n\nConstraints:\n\nnums1.length == m\nnums2.length == n\n0 <= m <= 1000\n0 <= n <= 1000\n1 <= m + n <= 2000\n-106 <= nums1[i], nums2[i] <= 106",
+            "tests": [
+                {"input": [[1,3],[2]], "output": 2.00000},
+                {"input": [[1,3,8],[7,9,10,11]], "output": 8.00000}
+            ]
+        },
+        "Regular Expression Matching": {
+            "name": "Regular Expression Matching",
+            "description": "Given an input string s and a pattern p, implement regular expression matching with support for '.' and '*' where:\n\n'.' Matches any single character.\n'*' Matches zero or more of the preceding element.\nThe matching should cover the entire input string (not partial).\n\nExample 1:\n\nInput: s = \"aa\", p = \"a\"\nOutput: false\nExplanation: \"a\" does not match the entire string \"aa\".\n\nExample 2:\n\nInput: s = \"aa\", p = \"a*\"\nOutput: true\nExplanation: '*' means zero or more of the preceding element, 'a'. Therefore, by repeating 'a' once, it becomes \"aa\".\n\nExample 3:\n\nInput: s = \"ab\", p = \".*\"\nOutput: true\nExplanation: \".*\" means \"zero or more (*) of any character (.)\".\n\nConstraints:\n\n1 <= s.length <= 20\n1 <= p.length <= 20\ns contains only lowercase English letters.\np contains only lowercase English letters, '.', and '*'.\nIt is guaranteed for each appearance of the character '*', there will be a previous valid character to match.",
+            "tests": [
+                {"input": ["aa", "a"], "output":false},
+                {"input": ["aa", "a*"], "output": true}
+            ]
+        },
+        "Merge k Sorted Lists": {
+            "name": "Merge k Sorted Lists",
+            "description": "You are given an array of k linked-lists lists, each linked-list is sorted in ascending order. Merge all the linked-lists into one sorted linked-list and return it.\", \"examples\": [ { \"input\": { \"lists\": [[1,4,5],[1,3,4],[2,6]] }, \"output\": [1,1,2,3,4,4,5,6], \"explanation\": \"The linked-lists are: [1->4->5, 1->3->4, 2->6], merging them into one sorted linked list: 1->1->2->3->4->4->5->6\" }, { \"input\": { \"lists\": [] }, \"output\": [] }, { \"input\": { \"lists\": [[]] }, \"output\": [] } ], \"constraints\": { \"k\": \"k == lists.length\", \"k_range\": \"0 <= k <= 10^4\", \"lists[i].length\": \"0 <= lists[i].length <= 500\", \"lists[i][j]\": \"-10^4 <= lists[i][j] <= 10^4\", \"sorted\": \"lists[i] is sorted in ascending order.\", \"sum\": \"The sum of lists[i].length will not exceed 10^4.",
+            "tests": [
+                {"input": [[[1, 4, 5], [1, 3, 4], [2, 6]]], "output":[1, 1, 2, 3, 4, 4, 5, 6]},
+                {"input": [[]], "output":[]}
+            ]
+        },
+        "Reverse Nodes in k-Group": {
+            "name": "Reverse Nodes in k-Group",
+            "description": "Given the head of a linked list, reverse the nodes of the list k at a time, and return the modified list. k is a positive integer and is less than or equal to the length of the linked list. If the number of nodes is not a multiple of k then left-out nodes, in the end, should remain as it is. You may not alter the values in the list's nodes, only nodes themselves may be changed.\", \"examples\": [ { \"input\": { \"head\": [1,2,3,4,5], \"k\": 2 }, \"output\": [2,1,4,3,5] }, { \"input\": { \"head\": [1,2,3,4,5], \"k\": 3 }, \"output\": [3,2,1,4,5] } ], \"constraints\": { \"n\": \"The number of nodes in the list is n.\", \"range_k\": \"1 <= k <= n <= 5000\", \"range_val\": \"0 <= Node.val <= 1000",
+            "tests": [
+                {"input": [[1, 2, 3, 4, 5], 2], "output":[2, 1, 4, 3, 5]},
+                {"input": [[1,2,3,4,5], 3], "output":[3,2,1,4,5]}
+            ]
+        },
+        "Substring with Concatenation of All Words": {
+            "name": "Substring with Concatenation of All Words",
+            "description": "You are given a string s and an array of strings words. All the strings of words are of the same length. A concatenated string is a string that exactly contains all the strings of any permutation of words concatenated. Return an array of the starting indices of all the concatenated substrings in s. You can return the answer in any order.\", \"examples\": [ { \"input\": { \"s\": \"barfoothefoobarman\", \"words\": [\"foo\",\"bar\"] }, \"output\": [0,9], \"explanation\": \"The substring starting at 0 is 'barfoo'. It is the concatenation of ['bar','foo'] which is a permutation of words. The substring starting at 9 is 'foobar'. It is the concatenation of ['foo','bar'] which is a permutation of words.\" }, { \"input\": { \"s\": \"wordgoodgoodgoodbestword\", \"words\": [\"word\",\"good\",\"best\",\"word\"] }, \"output\": [], \"explanation\": \"There is no concatenated substring.\" }, { \"input\": { \"s\": \"barfoofoobarthefoobarman\", \"words\": [\"bar\",\"foo\",\"the\"] }, \"output\": [6,9,12], \"explanation\": \"The substring starting at 6 is 'foobarthe'. It is the concatenation of ['foo','bar','the']. The substring starting at 9 is 'barthefoo'. It is the concatenation of ['bar','the','foo']. The substring starting at 12 is 'thefoobar'. It is the concatenation of ['the','foo','bar'].\" } ], \"constraints\": { \"s.length\": \"1 <= s.length <= 10^4\", \"words.length\": \"1 <= words.length <= 5000\", \"words[i].length\": \"1 <= words[i].length <= 30\", \"characters\": \"s and words[i] consist of lowercase English letters.",
+             "tests": [
+                {"input": ["barfoothefoobarman", ["foo", "bar"]], "output":[0,9]},
+                {"input": ["wordgoodgoodgoodbestword", ["word", "good", "best", "word"]], "output":[]}
+            ]
+        },
+        "Longest Valid Parentheses": {
+            "name": "Longest Valid Parentheses",
+            "description": "Given a string containing just the characters '(' and ')', return the length of the longest valid (well-formed) parentheses substring.\", \"examples\": [ { \"input\": { \"s\": \"(()\" }, \"output\": 2, \"explanation\": \"The longest valid parentheses substring is '()'.\" }, { \"input\": { \"s\": \")()())\" }, \"output\": 4, \"explanation\": \"The longest valid parentheses substring is '()()'.\" }, { \"input\": { \"s\": \"\" }, \"output\": 0 } ], \"constraints\": { \"s.length\": \"0 <= s.length <= 3 * 10^4\", \"characters\": \"s[i] is '(' or ')'",
+              "tests": [
+                {"input": ["(()"], "output":[2]},
+                {"input": [")()())"], "output":4}
+            ]
+        },
+        "Sudoku Solver": {
+            "name": "Sudoku Solver",
+            "description": "Write a program to solve a Sudoku puzzle by filling the empty cells. A sudoku solution must satisfy all of the following rules: Each of the digits 1-9 must occur exactly once in each row. Each of the digits 1-9 must occur exactly once in each column. Each of the digits 1-9 must occur exactly once in each of the 9 3x3 sub-boxes of the grid. The '.' character indicates empty cells.\", \"examples\": [ { \"input\": { \"board\": [[\"5\",\"3\",\".\",\".\",\"7\",\".\",\".\",\".\",\".\"],[\"6\",\".\",\".\",\"1\",\"9\",\"5\",\".\",\".\",\".\"],[\".\",\"9\",\"8\",\".\",\".\",\".\",\".\",\"6\",\".\"],[\"8\",\".\",\".\",\".\",\"6\",\".\",\".\",\".\",\"3\"],[\"4\",\".\",\".\",\"8\",\".\",\"3\",\".\",\".\",\"1\"],[\"7\",\".\",\".\",\".\",\"2\",\".\",\".\",\".\",\"6\"],[\".\",\"6\",\".\",\".\",\".\",\".\",\"2\",\"8\",\".\"],[\".\",\".\",\".\",\"4\",\"1\",\"9\",\".\",\".\",\"5\"],[\".\",\".\",\".\",\".\",\"8\",\".\",\".\",\"7\",\"9\"]] }, \"output\": [[\"5\",\"3\",\"4\",\"6\",\"7\",\"8\",\"9\",\"1\",\"2\"],[\"6\",\"7\",\"2\",\"1\",\"9\",\"5\",\"3\",\"4\",\"8\"],[\"1\",\"9\",\"8\",\"3\",\"4\",\"2\",\"5\",\"6\",\"7\"],[\"8\",\"5\",\"9\",\"7\",\"6\",\"1\",\"4\",\"2\",\"3\"],[\"4\",\"2\",\"6\",\"8\",\"5\",\"3\",\"7\",\"9\",\"1\"],[\"7\",\"1\",\"3\",\"9\",\"2\",\"4\",\"8\",\"5\",\"6\"],[\"9\",\"6\",\"1\",\"5\",\"3\",\"7\",\"2\",\"8\",\"4\"],[\"2\",\"8\",\"7\",\"4\",\"1\",\"9\",\"6\",\"3\",\"5\"],[\"3\",\"4\",\"5\",\"2\",\"8\",\"6\",\"1\",\"7\",\"9\"]], \"explanation\": \"The input board is shown above and the only valid solution is shown.\" } ], \"constraints\": { \"board.length\": \"board.length == 9\", \"board[i].length\": \"board[i].length == 9\", \"values\": \"board[i][j] is a digit or '.'\", \"solution\": \"It is guaranteed that the input board has only one solution.\" } }",
+            "tests": [
+                {"input": [[
+        ["5","3",".",".","7",".",".",".","."],
+        ["6",".",".","1","9","5",".",".","."],
+        [".","9","8",".",".",".",".","6","."],
+        ["8",".",".",".","6",".",".",".","3"],
+        ["4",".",".","8",".","3",".",".","1"],
+        ["7",".",".",".","2",".",".",".","6"],
+        [".","6",".",".",".",".","2","8","."],
+        [".",".",".","4","1","9",".",".","5"],
+        [".",".",".",".","8",".",".","7","9"]
+      ]], "output":[
+        ["5","3","4","6","7","8","9","1","2"],
+        ["6","7","2","1","9","5","3","4","8"],
+        ["1","9","8","3","4","2","5","6","7"],
+        ["8","5","9","7","6","1","4","2","3"],
+        ["4","2","6","8","5","3","7","9","1"],
+        ["7","1","3","9","2","4","8","5","6"],
+        ["9","6","1","5","3","7","2","8","4"],
+        ["2","8","7","4","1","9","6","3","5"],
+        ["3","4","5","2","8","6","1","7","9"]
+      ]},
+                {"input": [[
+        [".",".","9","7","4","8",".",".","."],
+        ["7",".",".",".",".",".",".",".","."],
+        [".","2",".","1",".","9",".",".","."],
+        [".",".","7",".",".",".","2","4","."],
+        [".","6","4",".","1",".","5","9","."],
+        [".","9","8",".",".",".","3",".","."],
+        [".",".",".","8",".","3",".","2","."],
+        [".",".",".",".",".",".",".",".","6"],
+        [".",".",".","2","7","5","9",".","."]
+      ]], "output":[
+        ["5","1","9","7","4","8","6","3","2"],
+        ["7","8","3","6","5","2","4","1","9"],
+        ["4","2","6","1","3","9","8","7","5"],
+        ["3","5","7","9","8","6","2","4","1"],
+        ["2","6","4","3","1","7","5","9","8"],
+        ["1","9","8","5","2","4","3","6","7"],
+        ["9","7","5","8","6","3","1","2","4"],
+        ["8","3","2","4","9","1","7","5","6"],
+        ["6","4","1","2","7","5","9","8","3"]
+      ]}
+            ]
+        },
+        "First Missing Positive": {
+            "name": "First Missing Positive",
+            "description": "Given an unsorted integer array nums. Return the smallest positive integer that is not present in nums. You must implement an algorithm that runs in O(n) time and uses O(1) auxiliary space.\", \"examples\": [ { \"input\": { \"nums\": [1,2,0] }, \"output\": 3, \"explanation\": \"The numbers in the range [1,2] are all in the array.\" }, { \"input\": { \"nums\": [3,4,-1,1] }, \"output\": 2, \"explanation\": \"1 is in the array but 2 is missing.\" }, { \"input\": { \"nums\": [7,8,9,11,12] }, \"output\": 1, \"explanation\": \"The smallest positive integer 1 is missing.\" } ], \"constraints\": { \"nums.length\": \"1 <= nums.length <= 10^5\", \"nums[i]\": \"-2^31 <= nums[i] <= 2^31 - 1\" } }",
+             "tests": [
+                {"input": [[1,2,0]], "output":3},
+                {"input": [[3,4,-1,1]], "output":2}
+            ]
+
+        },
+        "Trapping Rain Water": {
+            "name": "Trapping Rain Water",
+            "description": "Given n non-negative integers representing an elevation map where the width of each bar is 1, compute how much water it can trap after raining.\", \"examples\": [ { \"input\": { \"height\": [0,1,0,2,1,0,1,3,2,1,2,1] }, \"output\": 6, \"explanation\": \"The above elevation map (black section) is represented by array [0,1,0,2,1,0,1,3,2,1,2,1]. In this case, 6 units of rain water (blue section) are being trapped.\" }, { \"input\": { \"height\": [4,2,0,3,2,5] }, \"output\": 9 } ], \"constraints\": { \"n\": \"n == height.length\", \"n_range\": \"1 <= n <= 2 * 10^4\", \"height[i]\": \"0 <= height[i] <= 10^5\" } }",
+            "tests": [
+                {"input": [[0,1,0,2,1,0,1,3,2,1,2,1]], "output":6},
+                {"input": [[4,2,0,3,2,5]], "output":9}
+            ]
+        },
+        "Wildcard Matching": {
+            "name": "Wildcard Matching",
+            "description": {
+                "problem": "Given an input string (s) and a pattern (p), implement wildcard pattern matching with support for '?' and '*' where: '?' matches any single character. '*' matches any sequence of characters (including the empty sequence). The matching should cover the entire input string (not partial).\", \"examples\": [ { \"input\": { \"s\": \"aa\", \"p\": \"a\" }, \"output\": false, \"explanation\": \"'a' does not match the entire string 'aa'.\" }, { \"input\": { \"s\": \"aa\", \"p\": \"*\" }, \"output\": true, \"explanation\": \"'*' matches any sequence.\" }, { \"input\": { \"s\": \"cb\", \"p\": \"?a\" }, \"output\": false, \"explanation\": \"'?' matches 'c', but the second letter is 'a', which does not match 'b'.\" } ], \"constraints\": { \"length\": \"0 <= s.length, p.length <= 2000\", \"s\": \"s contains only lowercase English letters.\", \"p\": \"p contains only lowercase English letters, '?' or '*'\" } }",
+                "tests": [
+                    {"input": ["aa", "a"], "output":false},
+                    {"input": ["aa", "*"], "output":true}
+                ]
+            }
+        }
+    },
+
+"Medium": {
+"Add Two Numbers" : {
+            "name": "Add Two Numbers",
+            "description": "You are given two non-empty linked lists representing two non-negative integers. The digits are stored in reverse order, and each of their nodes contains a single digit. Add the two numbers and return the sum as a linked list.\n\nYou may assume the two numbers do not contain any leading zero, except the number 0 itself.\n\nExample 1:\n\nInput: l1 = [2,4,3], l2 = [5,6,4]\nOutput: [7,0,8]\nExplanation: 342 + 465 = 807.\n\nExample 2:\n\nInput: l1 = [0], l2 = [0]\nOutput: [0]\n\nExample 3:\n\nInput: l1 = [9,9,9,9,9,9,9], l2 = [9,9,9,9]\nOutput: [8,9,9,9,0,0,0,1]\n\nConstraints:\n\nThe number of nodes in each linked list is in the range [1, 100].\n0 <= Node.val <= 9\nIt is guaranteed that the list represents a number that does not have leading zeros.",
+            "tests": [
+                {"input": [[1,2,3,4], [5,6,7,8]], "output": [6,8,0,3,1]},
+                 {"input": [[4,2,2], [6,3,2]], "output": [6,4]}
+            ]
+        },
+
+
+        "Longest Substring Without Repeating Characters": {
+            "name":"Longest Substring Without Repeating Characters",
+            "description": "Given a string s, find the length of the longest substring without duplicate characters.\n\nExample 1:\n\nInput: s = \"abcabcbb\"\nOutput: 3\nExplanation: The answer is \"abc\", with the length of 3.\n\nExample 2:\n\nInput: s = \"bbbbb\"\nOutput: 1\nExplanation: The answer is \"b\", with the length of 1.\n\nExample 3:\n\nInput: s = \"pwwkew\"\nOutput: 3\nExplanation: The answer is \"wke\", with the length of 3.\nNotice that the answer must be a substring, \"pwke\" is a subsequence and not a substring.\n\nConstraints:\n\n0 <= s.length <= 5 * 10^4\ns consists of English letters, digits, symbols and spaces.",
+            "tests": [
+                {"input": ["s"], "output": 1},
+                 {"input": ["123451234"], "output": 5}
+            ]
+        },
+
+
+        "Longest Palindromic Substring": {
+            "name": "Longest Palindromic Substring",
+            "description": "Given a string s, return the longest palindromic substring in s.\n\nExample 1:\n\nInput: s = \"babad\"\nOutput: \"bab\"\nExplanation: \"aba\" is also a valid answer.\n\nExample 2:\n\nInput: s = \"cbbd\"\nOutput: \"bb\"\n\nConstraints:\n\n1 <= s.length <= 1000\ns consist of only digits and English letters.",
+            "tests": [
+                {"input": ["abbaef"], "output": "abba"},
+                {"input": ["1234543219"], "output": "123454321"}
+            ]
+        },
+
+
+        "Zigzag Conversion": {
+            "name": "Zigzag Conversion",
+            "description": "The string \"PAYPALISHIRING\" is written in a zigzag pattern on a given number of rows like this: (you may want to display this pattern in a fixed font for better legibility)\n\nP   A   H   N\nA P L S I I G\nY   I   R\nAnd then read line by line: \"PAHNAPLSIIGYIR\"\n\nWrite the code that will take a string and make this conversion given a number of rows:\n\nstring convert(string s, int numRows);\n\nExample 1:\n\nInput: s = \"PAYPALISHIRING\", numRows = 3\nOutput: \"PAHNAPLSIIGYIR\"\n\nExample 2:\n\nInput: s = \"PAYPALISHIRING\", numRows = 4\nOutput: \"PINALSIGYAHRPI\"\nExplanation:\nP     I    N\nA   L S  I G\nY A   H R\nP     I\n\nExample 3:\n\nInput: s = \"A\", numRows = 1\nOutput: \"A\"\n\nConstraints:\n\n1 <= s.length <= 1000\ns consists of English letters (lower-case and upper-case), ',' and '.'.\n1 <= numRows <= 1000",
+            "tests": [
+                {"input": ["HELLOWORLD", 2], "output": "HLOWRD EL OL"},
+                {"input": ["THISISAZIGZAGCONVERSIONTEST", 5],"output": "TSEIAGNITSHZVORCZSAGIOTSR"}
+            ]
+        },
+
+
+        "Reverse Integer": {
+            "name": "Reverse Integer",
+            "description": "Given a signed 32-bit integer x, return x with its digits reversed. If reversing x causes the value to go outside the signed 32-bit integer range [-2^31, 2^31 - 1], then return 0.\n\nAssume the environment does not allow you to store 64-bit integers (signed or unsigned).\n\nExample 1:\n\nInput: x = 123\nOutput: 321\n\nExample 2:\n\nInput: x = -123\nOutput: -321\n\nExample 3:\n\nInput: x = 120\nOutput: 21\n\nConstraints:\n\n-231 <= x <= 231 - 1",
+            "tests": [
+                 {
+      "input": [1000000003],
+      "output": 0
+    },
+    {
+      "input": [1463847412],
+      "output": 2147483641
+    },
+    {
+      "input": [-1463847412],
+      "output": -2147483641
+    }
+            ]
+        },
+
+
+        "String to Integer (atoi)": {
+            "name": "String to Integer (atoi)",
+            "description": "Implement the myAtoi(string s) function, which converts a string to a 32-bit signed integer.\n\nThe algorithm for myAtoi(string s) is as follows:\n\nWhitespace: Ignore any leading whitespace (\" \").\nSignedness: Determine the sign by checking if the next character is '-' or '+', assuming positivity if neither present.\nConversion: Read the integer by skipping leading zeros until a non-digit character is encountered or the end of the string is reached. If no digits were read, then the result is 0.\nRounding: If the integer is out of the 32-bit signed integer range [-231, 231 - 1], then round the integer to remain in the range. Specifically, integers less than -231 should be rounded to -231, and integers greater than 231 - 1 should be rounded to 231 - 1.\nReturn the integer as the final result.\n\nExample 1:\n\nInput: s = \"42\"\nOutput: 42\nExplanation:\nThe underlined characters are what is read in and the caret is the current reader position.\nStep 1: \"42\" (no characters read because there is no leading whitespace)\n         ^\nStep 2: \"42\" (no characters read because there is neither a '-' nor '+')\n         ^\nStep 3: \"42\" (\"42\" is read in)\n           ^\n\nExample 2:\n\nInput: s = \" -042\"\nOutput: -42\nExplanation:\nStep 1: \"   -042\" (leading whitespace is read and ignored)\n            ^\nStep 2: \"   -042\" ('-' is read, so the result should be negative)\n             ^\nStep 3: \"   -042\" (\"042\" is read in, leading zeros ignored in the result)\n               ^\n\nExample 3:\n\nInput: s = \"1337c0d3\"\nOutput: 1337\nExplanation:\nStep 1: \"1337c0d3\" (no characters read because there is no leading whitespace)\n         ^\nStep 2: \"1337c0d3\" (no characters read because there is neither a '-' nor '+')\n         ^\nStep 3: \"1337c0d3\" (\"1337\" is read in; reading stops because the next character is a non-digit)\n             ^\n\nExample 4:\n\nInput: s = \"0-1\"\nOutput: 0\nExplanation:\nStep 1: \"0-1\" (no characters read because there is no leading whitespace)\n         ^\nStep 2: \"0-1\" (no characters read because there is neither a '-' nor '+')\n         ^\nStep 3: \"0-1\" (\"0\" is read in; reading stops because the next character is a non-digit)\n          ^\n\nExample 5:\n\nInput: s = \"words and 987\"\nOutput: 0\nExplanation:\nReading stops at the first non-digit character 'w'.\n\nConstraints:\n\n0 <= s.length <= 200\ns consists of English letters (lower-case and upper-case), digits (0-9), ' ', '+', '-', and '.'.",
+            "tests": [
+                {
+                "input": ["words and 987"],
+                "output": 0
+                },
+                {
+                "input": ["-91283472332"],
+                "output": -2147483648
+                },
+                {
+                "input": ["91283472332"],
+                "output": 2147483647
+                },
+                {
+                "input": ["0-1"],
+                "output": 0
+                }
+            ]
+        },
+
+
+        "Container With Most Water": {
+            "name": "Container With Most Water",
+            "description": "You are given an integer array height of length n. There are n vertical lines drawn such that the two endpoints of the ith line are (i, 0) and (i, height[i]).\n\nFind two lines that together with the x-axis form a container, such that the container contains the most water.\n\nReturn the maximum amount of water a container can store.\n\nNotice that you may not slant the container.\n\nExample 1:\n\nInput: height = [1,8,6,2,5,4,8,3,7]\nOutput: 49\nExplanation: The above vertical lines are represented by array [1,8,6,2,5,4,8,3,7]. In this case, the max area of water (blue section) the container can contain is 49.\n\nExample 2:\n\nInput: height = [1,1]\nOutput: 1\n\nConstraints:\n\nn == height.length\n2 <= n <= 10^5\n0 <= height[i] <= 10^4",
+            "tests": [
+                {
+                "input": [[1,3,2,5,25,24,5]],
+                "output": 24
+                },
+                {
+                "input": [[2,3,10,5,7,8,9]],
+                "output": 36
+                },
+                {
+                "input": [[1,2,4,3]],
+                "output": 4
+                }
+            ]
+        },
+
+
+        "Integer to Roman": {
+            "name": "Integer to Roman",
+            "description": "Seven different symbols represent Roman numerals with the following values:\n\nSymbol\tValue\nI\t1\nV\t5\nX\t10\nL\t50\nC\t100\nD\t500\nM\t1000\n\nRoman numerals are formed by appending the conversions of decimal place values from highest to lowest. Converting a decimal place value into a Roman numeral has the following rules:\n\nIf the value does not start with 4 or 9, select the symbol of the maximal value that can be subtracted from the input, append that symbol to the result, subtract its value, and convert the remainder to a Roman numeral.\nIf the value starts with 4 or 9 use the subtractive form representing one symbol subtracted from the following symbol, for example, 4 is 1 (I) less than 5 (V): IV and 9 is 1 (I) less than 10 (X): IX. Only the following subtractive forms are used: 4 (IV), 9 (IX), 40 (XL), 90 (XC), 400 (CD) and 900 (CM).\nOnly powers of 10 (I, X, C, M) can be appended consecutively at most 3 times to represent multiples of 10. You cannot append 5 (V), 50 (L), or 500 (D) multiple times. If you need to append a symbol 4 times use the subtractive form.\n\nGiven an integer, convert it to a Roman numeral.\n\nExample 1:\n\nInput: num = 3749\nOutput: \"MMMDCCXLIX\"\nExplanation:\n3000 = MMM as 1000 (M) + 1000 (M) + 1000 (M)\n 700 = DCC as 500 (D) + 100 (C) + 100 (C)\n  40 = XL as 10 (X) less of 50 (L)\n   9 = IX as 1 (I) less of 10 (X)\nNote: 49 is not 1 (I) less of 50 (L) because the conversion is based on decimal places\n\nExample 2:\n\nInput: num = 58\nOutput: \"LVIII\"\nExplanation:\n50 = L\n 8 = VIII\n\nExample 3:\n\nInput: num = 1994\nOutput: \"MCMXCIV\"\nExplanation:\n1000 = M\n 900 = CM\n  90 = XC\n   4 = IV",
+            "tests": [
+                {
+                "input": [58],
+                "output": "LVIII"
+                },
+                {
+                "input": [1994],
+                "output": "MCMXCIV"
+                },
+                {
+                "input": [1],
+                "output": "I"
+                }
+            ]
+        },
+
+
+        "3Sum": {
+            "name": "3Sum",
+            "description": "Given an integer array nums, return all the triplets [nums[i], nums[j], nums[k]] such that i != j, i != k, and j != k, and nums[i] + nums[j] + nums[k] == 0.\n\nNotice that the solution set must not contain duplicate triplets.\n\nExample 1:\n\nInput: nums = [-1,0,1,2,-1,-4]\nOutput: [[-1,-1,2],[-1,0,1]]\nExplanation:\nnums[0] + nums[1] + nums[2] = (-1) + 0 + 1 = 0.\nnums[1] + nums[2] + nums[4] = 0 + 1 + (-1) = 0.\nnums[0] + nums[3] + nums[4] = (-1) + 2 + (-1) = 0.\nThe distinct triplets are [-1,0,1] and [-1,-1,2].\nNotice that the order of the output and the order of the triplets does not matter.\n\nExample 2:\n\nInput: nums = [0,1,1]\nOutput: []\nExplanation: The only possible triplet does not sum up to 0.\n\nExample 3:\n\nInput: nums = [0,0,0]\nOutput: [[0,0,0]]\nExplanation: The only possible triplet sums up to 0.\n\nConstraints:\n\n3 <= nums.length <= 3000\n-10^5 <= nums[i] <= 10^5",
+            "tests": [
+                 {
+            "input": [[0,1,1]],
+            "output": []
+            },
+            {
+            "input": [[0,0,0]],
+            "output": [[0,0,0]]
+            },
+            {
+            "input": [[-2,0,1,1,2]],
+            "output": [[-2,0,2],[-2,1,1]]
+            },
+            {
+            "input": [[-4,-2,-1,0,1,2,3]],
+            "output": [[-4,1,3],[-4,2,2],[-2,-1,3],[-2,0,2],[-1,0,1]]
+            }
+            ]
+        },
+
+
+        "3Sum Closest": {
+            "name": "3Sum Closest",
+            "description": "Given an integer array nums of length n and an integer target, find three integers in nums such that the sum is closest to target.\n\nReturn the sum of the three integers.\n\nYou may assume that each input would have exactly one solution.\n\nExample 1:\n\nInput: nums = [-1,2,1,-4], target = 1\nOutput: 2\nExplanation: The sum that is closest to the target is 2. (-1 + 2 + 1 = 2).\n\nExample 2:\n\nInput: nums = [0,0,0], target = 1\nOutput: 0\nExplanation: The sum that is closest to the target is 0. (0 + 0 + 0 = 0).\n\nConstraints:\n\n3 <= nums.length <= 500\n-1000 <= nums[i] <= 1000\n-10^4 <= target <= 10^4",
+            "tests": [
+                 {
+            "input": [[-3,-2,-5,3,-4], -1],
+            "output": -2
+            },
+            {
+            "input": [[1,2,5,10,11], 12],
+            "output": 13
+            },
+            {
+            "input": [[-1,2,1,-4,5,6], 8],
+            "output": 8
+            },
+            {
+            "input": [[-1,2,1,-4], -1],
+            "output": -1
+            }
+            ]
+        }
+
+
+    
+},
+
+"Easy": {
+    "Merge Two Sorted Lists": {
+        "name": "Merge Two Sorted Lists",
+        "description": "You are given the heads of two sorted linked lists list1 and list2. Merge the two lists into one sorted list. The list should be made by splicing together the nodes of the first two lists. Return the head of the merged linked list.\", \"examples\": [{\"input\": {\"list1\": [1,2,4], \"list2\": [1,3,4]}, \"output\": [1,1,2,3,4,4], \"explanation\": \"The merged linked list is 1->1->2->3->4->4.\"}, {\"input\": {\"list1\": [], \"list2\": []}, \"output\": [], \"explanation\": \"Both lists are empty.\"}, {\"input\": {\"list1\": [], \"list2\": [0]}, \"output\": [0], \"explanation\": \"Only list2 has a node.\"}], \"constraints\": {\"nodes\": \"The number of nodes in both lists is in the range [0, 50].\", \"node_values\": \"-100 <= Node.val <= 100\", \"sorted\": \"Both list1 and list2 are sorted in non-decreasing order.\"}}",
+        "tests": [
+                    {"input": [[1,2,4], [1,3,4]], "output": [1,1,2,3,4,4]},
+                    {"input": [[2,4,6], [1,3,5]], "output":[1,2,3,4,5,6]}
+                ]
+    },
+    "Remove Duplicates from Sorted Array": {
+        "name": "Remove Duplicates from Sorted Array",
+        "description": "Given an integer array nums sorted in non-decreasing order, remove the duplicates in-place such that each unique element appears only once. The relative order of the elements should be kept the same. Then return the number of unique elements in nums.\n\nConsider the number of unique elements of nums to be k, to get accepted, you need to do the following things:\n\nChange the array nums such that the first k elements of nums contain the unique elements in the order they were present in nums initially. The remaining elements of nums are not important as well as the size of nums.\nReturn k.\n\nCustom Judge:\n\nThe judge will test your solution with the following code:\n\nint[] nums = [...]; // Input array\nint[] expectedNums = [...]; // The expected answer with correct length\n\nint k = removeDuplicates(nums); // Calls your implementation\n\nassert k == expectedNums.length;\nfor (int i = 0; i < k; i++) {\n    assert nums[i] == expectedNums[i];\n}\nIf all assertions pass, then your solution will be accepted.",
+        "tests": [
+                    {"input": [[1,1,2]], "output":2},
+                    {"input": [[0,0,1,1,1,2,2,3,3,4]], "output":5}
+                ]
+},
+"Remove Element":{
+"name": "Remove ELement",
+"description": "Given an integer array nums and an integer val, remove all occurrences of val in nums in-place. The order of the elements may be changed. Then return the number of elements in nums which are not equal to val.\n\nConsider the number of elements in nums which are not equal to val be k, to get accepted, you need to do the following things:\n\nChange the array nums such that the first k elements of nums contain the elements which are not equal to val. The remaining elements of nums are not important as well as the size of nums.\nReturn k.\n\nCustom Judge:\n\nThe judge will test your solution with the following code:\n\nint[] nums = [...]; // Input array\nint val = ...; // Value to remove\nint[] expectedNums = [...]; // The expected answer with correct length.\n                            // It is sorted with no values equaling val.\n\nint k = removeElement(nums, val); // Calls your implementation\n\nassert k == expectedNums.length;\nsort(nums, 0, k); // Sort the first k elements of nums\nfor (int i = 0; i < actualLength; i++) {\n    assert nums[i] == expectedNums[i];\n}\nIf all assertions pass, then your solution will be accepted.",
+"tests": [
+            {"input": [[3,2,2,3], 3], "output":2},
+            {"input": [[0,1,2,2,3,0,4,2], 2], "output":5}
+                ]
+
+
+},
+"Two Sum": {
+            "name": "Two Sum",
+            "description": "Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.\n\nYou may assume that each input would have exactly one solution, and you may not use the same element twice.\n\nYou can return the answer in any order.",
+            "tests": [
+                {
+                "input": [[2,7,11,15], 9],
+                "output": [0,1]
+                },
+                {
+                "input": [[3,2,4], 6],
+                "output": [1,2]
+                }
+            ]
+        },
+
+
+        "Palindrome Number": {
+            "name": "Palindrome Number",
+            "description": "Given an integer x, return true if x is a palindrome, and false otherwise.\n\nA palindrome reads the same backward as forward.",
+            "tests": [
+                {
+                "input": [121],
+                "output": true
+                },
+                {
+                "input": [-121],
+                "output": false
+                }
+            ]
+        },
+
+
+        "Roman to Integer": {
+            "name": "Roman to Integer",
+            "description": "Given a roman numeral, convert it to an integer.\n\nRoman numerals are represented by seven different symbols: I, V, X, L, C, D and M. Subtractive notation is used for 4, 9, 40, 90, 400, and 900.",
+            "tests": [
+                {
+                "input": ["III"],
+                "output": 3
+                },
+                {
+                "input": ["IV"],
+                "output": 4
+                }
+            ]
+        },
+
+
+        "Longest Common Prefix": {
+            "name": "Longest Common Prefix",
+            "description": "Write a function to find the longest common prefix string amongst an array of strings. If there is no common prefix, return an empty string \"\".",
+            "tests": [
+                {
+                "input": [["flower","flow","flight"]],
+                "output": "fl"
+                },
+                {
+                "input": [["interview","internet","internal"]],
+                "output": "inte"
+                }
+            ]
+        },
+
+
+        "Valid Parentheses": {
+            "name": "Valid Parentheses",
+            "description": "Given a string s containing just the characters '(', ')', '{', '}', '[' and ']', determine if the input string is valid. An input string is valid if open brackets are closed by the same type and in the correct order.",
+            "tests": [
+                {
+                "input": ["()"],
+                "output": true
+                },
+                {
+                "input": ["(]"],
+                "output": false
+                }
+            ]
+        },
+
+
+        "Search Insert Position": {
+            "name": "Search Insert Position",
+            "description": "Given a sorted array of distinct integers and a target value, return the index if the target is found. If not, return the index where it would be if it were inserted in order. Must be done in O(log n) time complexity.",
+            "tests": [
+                {
+                "input": [[1,3,5,6], 5],
+                "output": 2
+                },
+                {
+                "input": [[1,3,5,6], 2],
+                "output": 1
+                }
+            ]
+        },
+
+
+        "Find The Index of the First Occurrence in a String": {
+            "name": "Find the Index of the First Occurrence in a String",
+            "description": "Given two strings needle and haystack, return the index of the first occurrence of needle in haystack, or -1 if needle is not part of haystack.",
+            "tests": [
+                {
+                "input": ["sadbutsad", "sad"],
+                "output": 0
+                },
+                {
+                "input": ["hello", "ll"],
+                "output": 2
+                }
+            ]
+        }
+    }
+}

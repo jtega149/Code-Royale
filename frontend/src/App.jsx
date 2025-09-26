@@ -9,7 +9,11 @@ import Profile from "./pages/Profile";
 import Practice from "./pages/Practice";
 import Match from "./pages/Match";
 
+
 function App() {
+
+
+  
   return (
     <Router>
       <div className="app-container"> {/* Add this wrapper */}
