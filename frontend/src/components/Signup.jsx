@@ -25,7 +25,7 @@ const Signup = () => {
 
         <div className="social">
           <div className="google">Google</div>
-          <div className="facebook">Facebook</div>
+          <div className="github">GitHub</div>
         </div>
       </form>
     </div>
