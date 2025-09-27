@@ -1,8 +1,9 @@
 // src/firebase.js
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth"; // import auth if using authentication
+import { getAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore"; // If using Firestore
+import { getStorage } from "firebase/storage"; // If using Storage
 
-// Replace these with your actual Firebase project configuration values
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_apiKey,
   authDomain: import.meta.env.VITE_authDomain,
@@ -12,8 +13,12 @@ const firebaseConfig = {
   appId: import.meta.env.VITE_appId,
 };
 
-// Initialize Firebase app
+// Initialize Firebase
 export const app = initializeApp(firebaseConfig);
 
-// Initialize Firebase auth
+// Initialize services
 export const auth = getAuth(app);
+export const db = getFirestore(app); // If using Firestore
+export const storage = getStorage(app); // If using Storage
+
+export default app;

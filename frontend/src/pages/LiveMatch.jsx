@@ -3,9 +3,10 @@ import React, { useState, useEffect, useRef } from "react";
 import Navbar from "../components/Navbar";
 import MatchEditor from "../components/MatchEditor";
 import { io } from "socket.io-client";
+import { auth } from "../firebase";
+import { onAuthStateChanged } from "firebase/auth";
 import "./Styles/LiveMatch.css";
 
-const socket = io("http://localhost:5001"); // backend Socket.io
 const MATCH_ID = "match123"; // dynamically assign per match
 
 const problem = {
@@ -24,42 +25,101 @@ const LiveMatch = () => {
   const [messageInput, setMessageInput] = useState("");
   const [opponentCode, setOpponentCode] = useState("def example():\n    pass");
   const [userCode, setUserCode] = useState("");
+  const [username, setUsername] = useState("");
+  const [user, setUser] = useState(null); // Track auth state
+  const [loading, setLoading] = useState(true); // Loading state
 
   const [leftWidth, setLeftWidth] = useState(500);
   const [opponentHeight, setOpponentHeight] = useState(200);
   const [editorHeight, setEditorHeight] = useState(400);
 
   const containerRef = useRef();
+  const socketRef = useRef();
 
-  // Join match room and setup listeners
+  // Firebase auth state listener
   useEffect(() => {
-    socket.emit("joinMatch", MATCH_ID);
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        // User is signed in
+        setUser(currentUser);
+        const userDisplayName = currentUser.displayName || 
+                               currentUser.email || 
+                               `User${currentUser.uid.slice(-4)}`;
+        setUsername(userDisplayName);
+        console.log("User authenticated:", userDisplayName);
+      } else {
+        // User is signed out
+        setUser(null);
+        setUsername("");
+        console.log("User not authenticated");
+        // Optional: redirect to login page
+        // navigate('/login');
+      }
+      setLoading(false);
+    });
 
-    socket.on("receiveMessage", (msg) => {
+    // Cleanup subscription on unmount
+    return () => unsubscribe();
+  }, []);
+
+  // Socket connection - only establish when user is authenticated
+  useEffect(() => {
+    if (!user) return; // Don't connect socket if user not authenticated
+
+    setLoading(true);
+    
+    // Create socket connection
+    socketRef.current = io("http://localhost:5001");
+
+    // Join match room with user info
+    socketRef.current.emit("joinMatch", MATCH_ID);
+
+    // Set up event listeners
+    socketRef.current.on("receiveMessage", (msg) => {
       setChatMessages((prev) => [...prev, msg]);
     });
 
-    // Listen for opponent code updates
-    socket.on("receiveCodeUpdate", (newCode) => {
+    socketRef.current.on("codeUpdate", (newCode) => {
       setOpponentCode(newCode);
     });
 
-    return () => {
-      socket.off("receiveMessage");
-      socket.off("receiveCodeUpdate");
-    };
-  }, []);
+    // Socket connection established
+    socketRef.current.on("connect", () => {
+      console.log("Socket connected with ID:", socketRef.current.id);
+      setLoading(false);
+    });
 
-  // Send chat message
+    // Handle connection errors
+    socketRef.current.on("connect_error", (error) => {
+      console.error("Socket connection error:", error);
+      setLoading(false);
+    });
+
+    // Cleanup on unmount or when user changes
+    return () => {
+      if (socketRef.current) {
+        socketRef.current.off("receiveMessage");
+        socketRef.current.off("codeUpdate");
+        socketRef.current.off("connect");
+        socketRef.current.off("connect_error");
+        socketRef.current.disconnect();
+      }
+    };
+  }, [user]); // Re-run when user auth state changes
+
+  // Send chat message with Firebase user info
   const sendMessage = () => {
-    if (messageInput.trim() !== "") {
-      const msg = { user: "You", message: messageInput };
-      socket.emit("sendMessage", {
+    if (messageInput.trim() !== "" && socketRef.current && user) {
+      const myMsg = { user: "You", message: messageInput };
+      setChatMessages((prev) => [...prev, myMsg]);
+
+      // Send as plain object with expected fields
+      socketRef.current.emit("sendMessage", {
         matchId: MATCH_ID,
         message: messageInput,
-        user: "Opponent",
+        user: username
       });
-      setChatMessages((prev) => [...prev, msg]);
+
       setMessageInput("");
     }
   };
@@ -67,7 +127,13 @@ const LiveMatch = () => {
   // Send code updates to opponent
   const handleCodeChange = (newCode) => {
     setUserCode(newCode);
-    socket.emit("sendCodeUpdate", { matchId: MATCH_ID, code: newCode });
+    if (socketRef.current && user) {
+      socketRef.current.emit("codeUpdate", { 
+        matchId: MATCH_ID, 
+        code: newCode,
+        userId: user.uid // Optional: include user ID
+      });
+    }
   };
 
   // Resizing handlers (same as before)
@@ -122,11 +188,37 @@ const LiveMatch = () => {
     window.addEventListener("mouseup", stopDrag);
   };
 
+  // Show loading state
+  if (loading) {
+    return (
+      <>
+        <Navbar />
+        <div className="loading-container">
+          <p>Loading match...</p>
+        </div>
+      </>
+    );
+  }
+
+  // Show auth required message
+  if (!user) {
+    return (
+      <>
+        <Navbar />
+        <div className="auth-required-container">
+          <p>Please sign in to join the match.</p>
+          {/* Optional: Add login button or redirect */}
+        </div>
+      </>
+    );
+  }
+
   return (
     <>
       <Navbar />
       <div className="submit-container">
         <button className="submit-button">Submit</button>
+        <span className="user-info">Logged in as: {username}</span>
       </div>
 
       <div className="livematch-container" ref={containerRef}>
@@ -188,8 +280,11 @@ const LiveMatch = () => {
                     value={messageInput}
                     onChange={(e) => setMessageInput(e.target.value)}
                     onKeyDown={(e) => e.key === "Enter" && sendMessage()}
+                    disabled={!user} // Disable if not authenticated
                   />
-                  <button onClick={sendMessage}>Send</button>
+                  <button onClick={sendMessage} disabled={!user}>
+                    Send
+                  </button>
                 </div>
               )}
             </div>
