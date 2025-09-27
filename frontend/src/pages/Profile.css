@@ -14,6 +14,12 @@
   margin-bottom: 40px;
 }
 
+.name-rank {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .profile-pic {
   width: 150px;
   height: 150px;
@@ -26,6 +32,11 @@
 .profile-header h1 {
   font-size: 36px;
   margin-bottom: 10px;
+}
+
+.rank-icon {
+  width: 70px;
+  height: 70px;
 }
 
 .edit-profile-button {

@@ -2,7 +2,19 @@ import React from 'react';
 import Navbar from '../components/Navbar';
 import "./Profile.css";
 
+
+function getRankIcon(xp) {
+  if (xp >= 100) return "/First place trophy V1.png";
+  if (xp >= 50) return "/Second place trophy V2.png";
+  return "/Third place trophy V1.png";
+}
+
 const Profile = () => {
+  const username = "Jane Doe"; 
+  const xp = 100;
+
+  const rankIcon = getRankIcon(xp);
+
   return (
     <>
       <Navbar />
@@ -10,9 +22,15 @@ const Profile = () => {
         {/* Profile header */}
         <div className="profile-header">
           <img src="/pfp1.png" alt="Profile" className="profile-pic" />
-          <h1>John Ortega</h1>
+         
+          {/*Name and Rank*/}
+          <div className="name-rank">
+          <h1>{username}</h1>
+          <img src={rankIcon} alt="Rank" className="rank-icon" />
+          </div>
           <button className="edit-profile-button">Edit Profile</button>
         </div>
+
 
         {/* Stats */}
         <div className="profile-stats">
