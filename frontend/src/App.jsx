@@ -4,7 +4,6 @@ import Login from "./components/Login";
 import Signup from "./components/Signup";
 import Home from "./pages/Home";
 import Leaderboard from "./pages/Leaderboard";
-import "./App.css"; // Create this file if it doesn't exist
 import Profile from "./pages/Profile";
 import Practice from "./pages/Practice";
 import Match from "./pages/Match";
@@ -43,7 +42,7 @@ function App() {
   return (
     <AuthProvider>
     <Router>
-      <div className="app-container"> {/* Add this wrapper */}
+      <div className="app-container">
         <Routes>
           {/* Public pages (no navbar) */}
           <Route path="/login" element={<Login />} />
@@ -55,6 +54,7 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/practice" element={<Practice />} />
           <Route path="/match" element={<Match />} />
+          <Route path="/match/livematch" element={<LiveMatch />} /> {/* <-- new route */}
         </Routes>
       </div>
     </Router>

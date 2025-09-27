@@ -1,0 +1,32 @@
+/* src/components/Styles/MatchEditor.css */
+.editor-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
+  color: #fff;
+  font-family: 'Poppins', sans-serif;
+}
+
+.code-editor {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.submit-button {
+  margin-top: 15px;
+  padding: 12px 20px;
+  font-weight: bold;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  background: linear-gradient(45deg, #23a2f6, #1845ad);
+  color: #fff;
+  transition: all 0.3s ease;
+}
+
+.submit-button:hover {
+  background: linear-gradient(45deg, #f09819, #ff512f);
+  transform: translateY(-3px);
+}
