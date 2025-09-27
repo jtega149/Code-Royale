@@ -1,19 +1,58 @@
+// src/pages/Match.jsx
 import React from "react";
-import Navbar from "../components/Navbar";
-import { FaGlobe, FaUserFriends, FaBook, FaSearch, FaLayerGroup, FaTrophy } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import "./Match.css";
+import Navbar from "../components/Navbar";
+import { 
+  FaGlobe, 
+  FaUserFriends, 
+  FaBook, 
+  FaSearch, 
+  FaLayerGroup, 
+  FaTrophy 
+} from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+import "./Styles/Match.css";
 
 const Match = () => {
   const navigate = useNavigate();
 
   const matchOptions = [
-    { title: "Play Online", icon: <FaGlobe />, description: "Compete with random players online." },
-    { title: "Play a Friend", icon: <FaUserFriends />, description: "Challenge your friends directly." },
-    { title: "Practice Mode", icon: <FaBook />, description: "Solve problems without pressure." },
-    { title: "Play Specific Problem", icon: <FaSearch />, description: "Pick a problem to compete on." },
-    { title: "Play Specific Topic", icon: <FaLayerGroup />, description: "Focus on a particular topic." },
-    { title: "View Leaderboard", icon: <FaTrophy />, description: "Check top players worldwide." },
+    { 
+      title: "Play Online", 
+      icon: <FaGlobe />, 
+      description: "Compete with random players online.",
+      onClick: () => navigate("/match/livematch") // navigate to LiveMatch page
+    },
+    { 
+      title: "Play a Friend", 
+      icon: <FaUserFriends />, 
+      description: "Challenge your friends directly.",
+      onClick: () => alert("Feature coming soon!") 
+    },
+    { 
+      title: "Practice Mode", 
+      icon: <FaBook />, 
+      description: "Solve problems without pressure.",
+      onClick: () => alert("Feature coming soon!") 
+    },
+    { 
+      title: "Play Specific Problem", 
+      icon: <FaSearch />, 
+      description: "Pick a problem to compete on.",
+      onClick: () => alert("Feature coming soon!") 
+    },
+    { 
+      title: "Play Specific Topic", 
+      icon: <FaLayerGroup />, 
+      description: "Focus on a particular topic.",
+      onClick: () => alert("Feature coming soon!") 
+    },
+    { 
+      title: "View Leaderboard", 
+      icon: <FaTrophy />, 
+      description: "Check top players worldwide.",
+      onClick: () => alert("Feature coming soon!") 
+    },
   ];
 
   const handleSelect = (title) => {

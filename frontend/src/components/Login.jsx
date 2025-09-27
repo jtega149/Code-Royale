@@ -1,50 +1,32 @@
 import React from "react";
-import "./Login.css";
+import "./Styles/Login.css";
+import { useState } from 'react';
+import { useAuth } from "../context/AuthContext";
+
+
 
 // Needs to be moved to the root 
-import { initializeApp } from "firebase/app";
-
-import { getAnalytics } from "firebase/analytics";
-import { useState } from 'react'
-
 
 import {
-  GoogleAuthProvider,
-  GithubAuthProvider,
-  connectAuthEmulator,
-  getAuth,
+  GithubAuthProvider,  
   onAuthStateChanged,
   signInWithPopup,
   signOut,
 } from 'firebase/auth';
 
 
+
 const Login = () => {
   // console.log(import.meta.env)
   // console.log(import.meta.env.apiKey)
   // Make environment files
-  const firebaseConfig = {
-    apiKey: import.meta.env.VITE_apiKey,
-    authDomain: import.meta.env.VITE_authDomain,
-    projectId: import.meta.env.VITE_projectId,
-    storageBucket: import.meta.env.VITE_storageBucket,
-    messagingSenderId: import.meta.env.VITE_messagingSenderId,
-    appId: import.meta.env.VITE_appId,
-    measurementId: import.meta.env.VITE_measurementId
-  };
+  
+  const { user, logout, updateAccountDetails, updateSignInStatus, updateOauthToken } = useAuth();
 
-
-  const [oauthToken, updateOauthToken] = useState({ textContent: "" });
-
-  const [signInStatus, updateSignInStatus] = useState({ textContent: "Sign in" });
-
-  const [accountDetails, updateAccountDetails] = useState({ textContent: "" });
+  
   const [signInButton, updateSignInButton] = useState({ textContent: "Sign in with GitHub" });
 
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth();
-
-  const analytics = getAnalytics(app);
+  
 
   function toggleSignIn(method) {
 

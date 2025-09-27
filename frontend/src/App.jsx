@@ -7,11 +7,39 @@ import Leaderboard from "./pages/Leaderboard";
 import Profile from "./pages/Profile";
 import Practice from "./pages/Practice";
 import Match from "./pages/Match";
-import Friend_play from "./pages/Friend_play"; // <--- added
+import LiveMatch from "./pages/LiveMatch";
+import { initializeApp } from "firebase/app";
+
+import ReactDOM from "react-dom";
+import { AuthProvider } from "./context/AuthContext";
+
+import { getAnalytics } from "firebase/analytics";
+import { useState } from 'react'
+
+import {
+  GoogleAuthProvider,
+  GithubAuthProvider,
+  connectAuthEmulator,
+  getAuth,
+  onAuthStateChanged,
+  signInWithPopup,
+  signOut,
+} from 'firebase/auth';import Friend_play from "./pages/Friend_play"; // <--- added
 import "./App.css";
 
 function App() {
+
+  console.log(import.meta.env.VITE_apiKey)
+
+
+
+
+
+
+
+
   return (
+    <AuthProvider>
     <Router>
       <div className="app-container">
         <Routes>
@@ -22,10 +50,12 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/practice" element={<Practice />} />
           <Route path="/match" element={<Match />} />
+          <Route path="/match/livematch" element={<LiveMatch />} /> {/* <-- new route */}
           <Route path="/friend-play" element={<Friend_play />} /> {/* <--- added */}
         </Routes>
       </div>
     </Router>
+    </AuthProvider>
   );
 }
 
