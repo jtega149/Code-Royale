@@ -4,6 +4,13 @@ import { useAuth } from "../context/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
 import "./Styles/Profile.css";
 
+
+function getRankIcon(xp) {
+  if (xp >= 100) return "/First place trophy V1.png";
+  if (xp >= 50) return "/Second place trophy V2.png";
+  return "/Third place trophy V1.png";
+}
+
 const Profile = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
@@ -68,6 +75,11 @@ const Profile = () => {
 
   if (loading) return <p style={{ textAlign: "center", marginTop: "50px" }}>Loading profile...</p>;
 
+  const username = "Jane Doe"; 
+  const xp = 100;
+
+  const rankIcon = getRankIcon(xp);
+
   return (
     <>
       <Navbar />
@@ -85,7 +97,16 @@ const Profile = () => {
             Edit Profile
           </button>
           <button className="logout-button" onClick={handleLogout}>Logout</button>
+         
+          {/*Name and Rank*/}
+          <div className="name-rank">
+          <h1>{username}</h1>
+          <img src={rankIcon} alt="Rank" className="rank-icon" />
+          </div>
+          <button className="edit-profile-button">Edit Profile</button>
         </div>
+
+
 
         <div className="profile-stats">
           {["Trophies", "Wins", "Losses", "Win Rate", "Games Played", "Friends", "Global Ranking"].map(

@@ -159,22 +159,6 @@
   margin-bottom: 40px;
 }
 
-/* Logout Button */
-.logout-button {
-  padding: 10px 20px;
-  background-color: #f44336;
-  border: none;
-  border-radius: 5px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.3s ease;
-  margin-top: 10px;
-}
-
-.logout-button:hover {
-  background-color: #d32f2f;
-}
-
 /* Entire page background */
 body {
   background: linear-gradient(to right, #080710, #1a1a2e);
