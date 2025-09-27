@@ -3,9 +3,26 @@ import express from "express";
 import http from "http";
 import { Server } from "socket.io";
 import cors from "cors";
+import dotenv from 'dotenv';
+
+import { addUser, updateUser, deleteUser, getUsers } from './controllers/userControllers.js'; 
+
+
+dotenv.config(); // Load environment variables
 
 const app = express();
 app.use(cors());
+app.use(express.json()); // To parse JSON bodies
+
+// User routes
+app.post('/add-user', addUser);
+app.put('/update-user/:id', updateUser);
+app.delete('/delete-user/:id', deleteUser);
+app.get('/users', getUsers);
+// Your Express routes, etc.
+app.get("/", (req, res) => {
+  res.send("Hello World");
+});
 
 const server = http.createServer(app);
 
