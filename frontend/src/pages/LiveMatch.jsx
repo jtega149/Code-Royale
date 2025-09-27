@@ -2,79 +2,77 @@
 import React, { useState, useEffect, useRef } from "react";
 import Navbar from "../components/Navbar";
 import MatchEditor from "../components/MatchEditor";
+import Queue from "../components/Queue";
 import { io } from "socket.io-client";
 import { auth } from "../firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import "./Styles/LiveMatch.css";
 
-const MATCH_ID = "match123"; // dynamically assign per match
-
-const problem = {
-  title: "Two Sum",
-  description:
-    "Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.",
-  input: "nums = [2,7,11,15], target = 9",
-  output: "[0,1]",
-  solution: "def twoSum(nums, target): ...",
-  hints: ["Use a hash map", "Iterate once", "Check complement for each element"]
-};
-
 const LiveMatch = () => {
-  const [showChat, setShowChat] = useState(false);
+  const [currentMatch, setCurrentMatch] = useState(null);
+  const [matchStatus, setMatchStatus] = useState("idle");
   const [chatMessages, setChatMessages] = useState([]);
-  const [messageInput, setMessageInput] = useState("");
-  const [opponentCode, setOpponentCode] = useState("def example():\n    pass");
+  const [opponentCode, setOpponentCode] = useState("");
   const [userCode, setUserCode] = useState("");
-  const [username, setUsername] = useState("");
-  const [user, setUser] = useState(null); // Track auth state
-  const [loading, setLoading] = useState(true); // Loading state
+  const [socketReady, setSocketReady] = useState(false);
 
-  const [leftWidth, setLeftWidth] = useState(500);
-  const [opponentHeight, setOpponentHeight] = useState(200);
-  const [editorHeight, setEditorHeight] = useState(400);
-
-  const containerRef = useRef();
   const socketRef = useRef();
+  const currentUserRef = useRef(null);
 
-  // Firebase auth state listener
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      if (currentUser) {
-        // User is signed in
-        setUser(currentUser);
-        const userDisplayName = currentUser.displayName || 
-                               currentUser.email || 
-                               `User${currentUser.uid.slice(-4)}`;
-        setUsername(userDisplayName);
-        console.log("User authenticated:", userDisplayName);
-      } else {
-        // User is signed out
-        setUser(null);
-        setUsername("");
-        console.log("User not authenticated");
-        // Optional: redirect to login page
-        // navigate('/login');
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        const storedProfile = localStorage.getItem("profile");
+        let displayName = "Anonymous";
+        
+        if (storedProfile) {
+          try {
+            const profile = JSON.parse(storedProfile);
+            displayName = profile.name || user.displayName || "Anonymous";
+          } catch (error) {
+            console.error("Error parsing profile:", error);
+            displayName = user.displayName || "Anonymous";
+          }
+        } else {
+          displayName = user.displayName || "Anonymous";
+        }
+        
+        currentUserRef.current = { 
+          uid: user.uid, 
+          displayName: displayName 
+        };
+        initializeSocket();
       }
-      setLoading(false);
     });
 
-    // Cleanup subscription on unmount
-    return () => unsubscribe();
+    return () => {
+      if (socketRef.current) socketRef.current.disconnect();
+      unsubscribe();
+    };
   }, []);
 
-  // Socket connection - only establish when user is authenticated
-  useEffect(() => {
-    if (!user) return; // Don't connect socket if user not authenticated
-
-    setLoading(true);
-    
-    // Create socket connection
+  const initializeSocket = () => {
     socketRef.current = io("http://localhost:5001");
 
-    // Join match room with user info
-    socketRef.current.emit("joinMatch", MATCH_ID);
+    socketRef.current.on("connect", () => {
+      console.log("Socket connected:", socketRef.current.id);
+      setSocketReady(true);
+    });
 
-    // Set up event listeners
+    socketRef.current.on("queueStatus", (data) => {
+      console.log("Queue status:", data);
+    });
+
+    socketRef.current.on("queueUpdated", (data) => {
+      console.log("Queue length:", data.length);
+    });
+
+    socketRef.current.on("matchFound", (matchData) => {
+      setCurrentMatch(matchData);
+      setMatchStatus("in_match");
+      socketRef.current.emit("joinMatch", matchData.matchId);
+    });
+
     socketRef.current.on("receiveMessage", (msg) => {
       setChatMessages((prev) => [...prev, msg]);
     });
@@ -82,132 +80,59 @@ const LiveMatch = () => {
     socketRef.current.on("codeUpdate", (newCode) => {
       setOpponentCode(newCode);
     });
-
-    // Socket connection established
-    socketRef.current.on("connect", () => {
-      console.log("Socket connected with ID:", socketRef.current.id);
-      setLoading(false);
-    });
-
-    // Handle connection errors
-    socketRef.current.on("connect_error", (error) => {
-      console.error("Socket connection error:", error);
-      setLoading(false);
-    });
-
-    // Cleanup on unmount or when user changes
-    return () => {
-      if (socketRef.current) {
-        socketRef.current.off("receiveMessage");
-        socketRef.current.off("codeUpdate");
-        socketRef.current.off("connect");
-        socketRef.current.off("connect_error");
-        socketRef.current.disconnect();
-      }
-    };
-  }, [user]); // Re-run when user auth state changes
-
-  // Send chat message with Firebase user info
-  const sendMessage = () => {
-    if (messageInput.trim() !== "" && socketRef.current && user) {
-      const myMsg = { user: "You", message: messageInput };
-      setChatMessages((prev) => [...prev, myMsg]);
-
-      // Send as plain object with expected fields
-      socketRef.current.emit("sendMessage", {
-        matchId: MATCH_ID,
-        message: messageInput,
-        user: username
-      });
-
-      setMessageInput("");
-    }
   };
 
-  // Send code updates to opponent
+  const handleMatchFound = (matchData) => {
+    setCurrentMatch(matchData);
+    setMatchStatus("in_match");
+  };
+
+  const handleCancelQueue = () => {
+    setMatchStatus("idle");
+    if (socketRef.current) socketRef.current.emit("leaveQueue");
+  };
+
+  const sendMessage = (messageInput, setMessageInput) => {
+    if (!messageInput.trim() || !currentMatch) {
+      console.warn("Cannot send message: match not initialized yet");
+      return;
+    }
+
+    const msgData = {
+      matchId: currentMatch.matchId,
+      message: messageInput,
+      user: currentUserRef.current.displayName,
+    };
+
+    socketRef.current.emit("sendMessage", msgData);
+    setMessageInput("");
+  };
+
   const handleCodeChange = (newCode) => {
     setUserCode(newCode);
-    if (socketRef.current && user) {
-      socketRef.current.emit("codeUpdate", { 
-        matchId: MATCH_ID, 
-        code: newCode,
-        userId: user.uid // Optional: include user ID
-      });
+    if (socketRef.current && currentMatch) {
+      socketRef.current.emit("codeUpdate", { matchId: currentMatch.matchId, code: newCode });
     }
   };
 
-  // Resizing handlers (same as before)
-  const handleColumnResize = (e) => {
-    e.preventDefault();
-    const startX = e.clientX;
-    const startWidth = leftWidth;
-    const doDrag = (dragEvent) => {
-      const newLeftWidth = startWidth + (dragEvent.clientX - startX);
-      const containerWidth = containerRef.current.offsetWidth;
-      if (newLeftWidth > 300 && newLeftWidth < containerWidth - 300) {
-        setLeftWidth(newLeftWidth);
-      }
-    };
-    const stopDrag = () => {
-      window.removeEventListener("mousemove", doDrag);
-      window.removeEventListener("mouseup", stopDrag);
-    };
-    window.addEventListener("mousemove", doDrag);
-    window.addEventListener("mouseup", stopDrag);
+  const handleSubmit = () => {
+    console.log("Submitting code:", userCode);
+    alert("Code submitted! (Functionality to be implemented)");
   };
 
-  const handleOpponentResize = (e) => {
-    e.preventDefault();
-    const startY = e.clientY;
-    const startHeight = opponentHeight;
-    const doDrag = (dragEvent) => {
-      const newHeight = startHeight + (dragEvent.clientY - startY);
-      if (newHeight > 100 && newHeight < 500) setOpponentHeight(newHeight);
-    };
-    const stopDrag = () => {
-      window.removeEventListener("mousemove", doDrag);
-      window.removeEventListener("mouseup", stopDrag);
-    };
-    window.addEventListener("mousemove", doDrag);
-    window.addEventListener("mouseup", stopDrag);
-  };
-
-  const handleEditorResize = (e) => {
-    e.preventDefault();
-    const startY = e.clientY;
-    const startHeight = editorHeight;
-    const doDrag = (dragEvent) => {
-      const newHeight = startHeight + (dragEvent.clientY - startY);
-      if (newHeight > 200 && newHeight < 800) setEditorHeight(newHeight);
-    };
-    const stopDrag = () => {
-      window.removeEventListener("mousemove", doDrag);
-      window.removeEventListener("mouseup", stopDrag);
-    };
-    window.addEventListener("mousemove", doDrag);
-    window.addEventListener("mouseup", stopDrag);
-  };
-
-  // Show loading state
-  if (loading) {
+  if (matchStatus === "idle" || matchStatus === "queuing") {
     return (
       <>
         <Navbar />
-        <div className="loading-container">
-          <p>Loading match...</p>
-        </div>
-      </>
-    );
-  }
-
-  // Show auth required message
-  if (!user) {
-    return (
-      <>
-        <Navbar />
-        <div className="auth-required-container">
-          <p>Please sign in to join the match.</p>
-          {/* Optional: Add login button or redirect */}
+        <div className="matchmaking-container dark-theme">
+          <h2>Find a Coding Match</h2>
+          <Queue
+            socket={socketRef.current}
+            socketReady={socketReady}
+            currentUser={currentUserRef.current}
+            onMatchFound={handleMatchFound}
+            onCancel={handleCancelQueue}
+          />
         </div>
       </>
     );
@@ -216,106 +141,142 @@ const LiveMatch = () => {
   return (
     <>
       <Navbar />
-      <div className="submit-container">
-        <button className="submit-button">Submit</button>
-        <span className="user-info">Logged in as: {username}</span>
-      </div>
-
-      <div className="livematch-container" ref={containerRef}>
-        {/* Left Column */}
-        <div className="left-column" style={{ width: leftWidth }}>
-          <div className="problem-section">
-            <h2>{problem.title}</h2>
-            <p>{problem.description}</p>
-            <div className="examples">
-              <h4>Example Input:</h4>
-              <pre>{problem.input}</pre>
-              <h4>Example Output:</h4>
-              <pre>{problem.output}</pre>
-              <h4>Correct Solution:</h4>
-              <pre>{problem.solution}</pre>
-            </div>
-            <div className="hints">
-              <h4>Hints:</h4>
-              <ol>
-                {problem.hints.map((hint, idx) => (
-                  <li key={idx}>{hint}</li>
-                ))}
-              </ol>
-            </div>
-
-            {/* Opponent Section */}
-            <div className="opponent-chat">
-              <h3>Opponent</h3>
-              <div
-                className="resizable-opponent"
-                style={{ height: opponentHeight }}
-              >
-                <pre className="blurred-code">{opponentCode}</pre>
-                <div
-                  className="opponent-resizer"
-                  onMouseDown={handleOpponentResize}
-                />
-              </div>
-
-              <button
-                className="toggle-chat"
-                onClick={() => setShowChat(!showChat)}
-              >
-                {showChat ? "Hide Chat" : "Show Chat"}
-              </button>
-
-              {showChat && (
-                <div className="chat-box">
-                  <div className="chat-messages">
-                    {chatMessages.map((msg, idx) => (
-                      <p key={idx}>
-                        <strong>{msg.user}:</strong> {msg.message}
-                      </p>
-                    ))}
-                  </div>
-                  <input
-                    type="text"
-                    placeholder="Type a message..."
-                    value={messageInput}
-                    onChange={(e) => setMessageInput(e.target.value)}
-                    onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-                    disabled={!user} // Disable if not authenticated
-                  />
-                  <button onClick={sendMessage} disabled={!user}>
-                    Send
-                  </button>
-                </div>
-              )}
-            </div>
-          </div>
+      <div className="livematch-container dark-theme">
+        <div className="submit-section">
+          <button className="submit-button" onClick={handleSubmit}>
+            Submit Solution
+          </button>
         </div>
 
-        {/* Column Resizer */}
-        <div className="column-resizer" onMouseDown={handleColumnResize}></div>
+        <div className="match-layout">
+          {/* Left Column - Question, Opponent Screen, Chat */}
+          <div className="left-column">
+            <div className="problem-section">
+              <h3>Problem: {currentMatch?.problem?.title || "Two Sum"}</h3>
+              <div className="problem-description">
+                <p>{currentMatch?.problem?.description || 
+                  "Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target."}
+                </p>
+                <div className="problem-io">
+                  <h4>Input:</h4>
+                  <pre>{currentMatch?.problem?.input || "nums = [2,7,11,15], target = 9"}</pre>
+                  <h4>Output:</h4>
+                  <pre>{currentMatch?.problem?.output || "[0,1]"}</pre>
+                </div>
+                <div className="hints-section">
+                  <h4>Hints:</h4>
+                  <ul>
+                    {(currentMatch?.problem?.hints || ["Use a hash map", "Iterate once", "Check complement for each element"]).map((hint, index) => (
+                      <li key={index}>{hint}</li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </div>
 
-        {/* Right Column */}
-        <div className="right-column">
-          <h3>Your Code Editor</h3>
-          <div className="editor-container" style={{ height: editorHeight }}>
-            <MatchEditor problem={problem} onCodeChange={handleCodeChange} />
-            <div className="editor-resizer" onMouseDown={handleEditorResize} />
+            <div className="opponent-screen-section">
+              <h4>Opponent's Screen</h4>
+              <div className="blurred-screen">
+                <div className="blur-content">
+                  <p>Opponent's code is hidden during the match</p>
+                  <div className="blur-effect"></div>
+                </div>
+              </div>
+            </div>
+
+            <div className="chat-section">
+              <h4>Live Chat</h4>
+              <Chat
+                chatMessages={chatMessages}
+                currentUser={currentUserRef.current}
+                onSend={sendMessage}
+              />
+            </div>
           </div>
 
-          <div className="testcases">
-            <h4>Test Cases</h4>
-            <div className="testcase">
-              <pre>Input: [2,7,11,15], target = 9</pre>
-              <pre>Output: [0,1]</pre>
+          {/* Right Column - Code Editor and Test Cases */}
+          <div className="right-column">
+            <div className="editor-section">
+              <h4>Your Code</h4>
+              <MatchEditor code={userCode} onCodeChange={handleCodeChange} />
             </div>
-            <div className="testcase">
-              <pre>Input: [3,2,4], target = 6</pre>
-              <pre>Output: [1,2]</pre>
+
+            <div className="test-cases-section">
+              <h4>Test Cases</h4>
+              <div className="test-cases">
+                <div className="test-case">
+                  <h5>Sample Test Case 1</h5>
+                  <p><strong>Input:</strong> nums = [2,7,11,15], target = 9</p>
+                  <p><strong>Expected Output:</strong> [0,1]</p>
+                  <p><strong>Status:</strong> <span className="status-pending">Pending</span></p>
+                </div>
+                <div className="test-case">
+                  <h5>Sample Test Case 2</h5>
+                  <p><strong>Input:</strong> nums = [3,2,4], target = 6</p>
+                  <p><strong>Expected Output:</strong> [1,2]</p>
+                  <p><strong>Status:</strong> <span className="status-pending">Pending</span></p>
+                </div>
+                <div className="test-case">
+                  <h5>Sample Test Case 3</h5>
+                  <p><strong>Input:</strong> nums = [3,3], target = 6</p>
+                  <p><strong>Expected Output:</strong> [0,1]</p>
+                  <p><strong>Status:</strong> <span className="status-pending">Pending</span></p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </>
+  );
+};
+
+const Chat = ({ chatMessages, currentUser, onSend }) => {
+  const [messageInput, setMessageInput] = useState("");
+  const chatEndRef = useRef();
+  const chatMessagesRef = useRef();
+
+  const handleSend = () => {
+    if (messageInput.trim()) {
+      onSend(messageInput, setMessageInput);
+    }
+  };
+
+  useEffect(() => {
+    if (chatEndRef.current) {
+      chatEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [chatMessages]);
+
+  return (
+    <div className="chat-container">
+      <div className="chat-messages" ref={chatMessagesRef}>
+        {chatMessages.length === 0 ? (
+          <div className="no-messages">No messages yet. Start the conversation!</div>
+        ) : (
+          chatMessages.map((msg, idx) => (
+            <div
+              key={idx}
+              className={`chat-message ${msg.user === currentUser.displayName ? "self" : "opponent"}`}
+            >
+              <strong>{msg.user}: </strong>
+              {msg.message}
+            </div>
+          ))
+        )}
+        <div ref={chatEndRef}></div>
+      </div>
+      <div className="chat-input">
+        <input
+          type="text"
+          value={messageInput}
+          onChange={(e) => setMessageInput(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && handleSend()}
+          placeholder="Type a message..."
+        />
+        <button onClick={handleSend}>Send</button>
+      </div>
+    </div>
   );
 };
 

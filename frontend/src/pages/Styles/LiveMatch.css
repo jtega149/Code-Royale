@@ -1,158 +1,338 @@
-.livematch-container {
-  display: flex;
-  flex-direction: row;
-  gap: 0;
-  padding: 20px;
-  background-color: #121212;
-  color: #f0f0f0;
-  min-height: 90vh;
+/* Dark Theme Base */
+.dark-theme {
+  background-color: #1a1a1a;
+  color: #e0e0e0;
 }
 
-/* Columns */
+.livematch-container.dark-theme {
+  background-color: #121212;
+  /*min-height: 100%;*/
+  min-height: 1200px;
+  padding: 20px;
+}
+
+/* Submit Button Section */
+.submit-section {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.submit-button {
+  background-color: #bb86fc;
+  color: #121212;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.submit-button:hover {
+  background-color: #9b6ce0;
+}
+
+/* Main Layout */
+.match-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  height: calc(100vh - 120px);
+}
+
 .left-column {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  overflow-y: auto;
+  height: 100%;
 }
 
 .right-column {
-  flex: 1;
   display: flex;
   flex-direction: column;
   gap: 20px;
-  overflow-y: auto;
-  padding-left: 20px;
-}
-
-/* Resizer between columns */
-.column-resizer {
-  width: 5px;
-  cursor: ew-resize;
-  background-color: rgba(255, 255, 255, 0.3);
-  border-radius: 2px;
-}
-
-/* Problem Section */
-.problem-section {
-  background-color: rgba(255, 255, 255, 0.05);
-  padding: 15px;
-  border-radius: 10px;
-}
-
-.problem-section pre {
-  background-color: rgba(255, 255, 255, 0.1);
-  padding: 10px;
-  border-radius: 5px;
-  overflow-x: auto;
-}
-
-/* Opponent Editor */
-.resizable-opponent {
-  background-color: rgba(255, 255, 255, 0.05);
-  border-radius: 10px;
-  overflow: hidden;
-  position: relative;
-}
-
-.blurred-code {
-  filter: blur(5px);
-  padding: 10px;
   height: 100%;
+}
+
+/* Left Column Sections */
+.problem-section {
+  flex: 1;
+  background-color: #1e1e1e;
+  border-radius: 8px;
+  padding: 15px;
+  border: 1px solid #333;
   overflow-y: auto;
 }
 
-/* Vertical resizer for opponent editor */
-.opponent-resizer {
-  height: 5px;
-  cursor: ns-resize;
-  background-color: rgba(255, 255, 255, 0.3);
-  width: 100%;
-  position: absolute;
-  bottom: 0;
+.problem-section h3 {
+  color: #ffffff;
+  margin-bottom: 15px;
+  font-size: 1.2rem;
 }
 
-/* Chat box */
-.toggle-chat {
-  padding: 8px 12px;
-  background-color: #ff6600;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  color: white;
+.problem-description {
+  color: #cccccc;
+  line-height: 1.5;
 }
 
-.chat-box {
-  background-color: rgba(255, 255, 255, 0.1);
-  border-radius: 10px;
+.problem-io {
+  margin: 15px 0;
+}
+
+.problem-io h4 {
+  color: #bb86fc;
+  margin: 10px 0 5px 0;
+}
+
+.problem-io pre {
+  background-color: #252525;
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid #333;
+  color: #e0e0e0;
+  overflow-x: auto;
+  margin: 5px 0;
+}
+
+.hints-section ul {
+  margin-left: 20px;
+  color: #cccccc;
+}
+
+.hints-section li {
+  margin-bottom: 5px;
+}
+
+.opponent-screen-section {
+  height: 200px;
+  background-color: #1e1e1e;
+  border-radius: 8px;
+  padding: 15px;
+  border: 1px solid #333;
+}
+
+.opponent-screen-section h4 {
+  color: #ffffff;
+  margin-bottom: 10px;
+}
+
+.blurred-screen {
+  background-color: #252525;
+  border-radius: 6px;
+  padding: 20px;
+  text-align: center;
+  color: #888;
+  border: 1px solid #333;
+  height: calc(100% - 40px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chat-section {
+  height: 400px;
+  background-color: #1e1e1e;
+  border-radius: 8px;
+  padding: 15px;
+  border: 1px solid #333;
+}
+
+.chat-section h4 {
+  color: #ffffff;
+  margin-bottom: 10px;
+}
+
+/* Right Column Sections */
+.editor-section {
+  flex: 2;
+  background-color: #1e1e1e;
+  border-radius: 8px;
+  padding: 15px;
+  border: 1px solid #333;
+  max-height: 550px;
+}
+
+.editor-section h4 {
+  color: #ffffff;
+  margin-bottom: 10px;
+}
+
+.test-cases-section {
+  flex: 1;
+  background-color: #1e1e1e;
+  border-radius: 8px;
+  padding: 15px;
+  border: 1px solid #333;
+  overflow-y: auto;
+}
+
+.test-cases-section h4 {
+  color: #ffffff;
+  margin-bottom: 10px;
+}
+
+.test-cases {
   display: flex;
   flex-direction: column;
-  padding: 10px;
+  gap: 15px;
+}
+
+.test-case {
+  background-color: #252525;
+  padding: 15px;
+  border-radius: 6px;
+  border: 1px solid #333;
+}
+
+.test-case h5 {
+  color: #bb86fc;
+  margin-bottom: 8px;
+}
+
+.test-case p {
+  margin: 5px 0;
+  color: #cccccc;
+}
+
+.status-pending {
+  color: #ffb74d;
+}
+
+/* Chat Styles */
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  height: 90%;
+  background-color: #2d2d2d;
+  border-radius: 6px;
+  overflow: hidden;
 }
 
 .chat-messages {
   flex: 1;
   overflow-y: auto;
-  margin-bottom: 5px;
-}
-
-.chat-box input {
-  padding: 8px;
-  border-radius: 5px;
-  border: none;
-  background-color: rgba(0, 0, 0, 0.2);
-  color: white;
-}
-
-/* Right column testcases */
-.testcases {
-  background-color: rgba(255, 255, 255, 0.05);
   padding: 10px;
-  border-radius: 10px;
+  background-color: #252525;
+  max-height: 300px;
 }
 
-.testcase pre {
-  background-color: rgba(255, 255, 255, 0.1);
-  padding: 5px;
-  border-radius: 5px;
-  overflow-x: auto;
-  margin-bottom: 5px;
+.chat-messages::-webkit-scrollbar {
+  width: 6px;
 }
 
-/* Editor container (resizable vertically) */
-.editor-container {
-  position: relative;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 10px;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
+.chat-messages::-webkit-scrollbar-track {
+  background: #1a1a1a;
+  border-radius: 3px;
 }
 
-/* Resizer below editor */
-.editor-resizer {
-  height: 5px;
-  cursor: ns-resize;
-  background-color: rgba(255, 255, 255, 0.3);
-  width: 100%;
+.chat-messages::-webkit-scrollbar-thumb {
+  background: #555;
+  border-radius: 3px;
 }
 
-.submit-container {
-  display: flex;
-  justify-content: center;
-  margin: 10px 0;
+.chat-messages::-webkit-scrollbar-thumb:hover {
+  background: #777;
 }
 
-.submit-button {
-  background-color: #4caf50;
+.chat-message {
+  margin-bottom: 10px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  word-wrap: break-word;
+}
+
+.chat-message.self {
+  background-color: #0d47a1;
   color: white;
-  padding: 10px 25px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
+  margin-left: 20%;
+  text-align: right;
 }
 
-.submit-button:hover {
-  background-color: #45a049;
+.chat-message.opponent {
+  background-color: #37474f;
+  color: white;
+  margin-right: 20%;
+}
+
+.chat-message strong {
+  color: #bb86fc;
+}
+
+.no-messages {
+  text-align: center;
+  color: #888;
+  font-style: italic;
+  padding: 20px;
+}
+
+.chat-input {
+  display: flex;
+  padding: 10px;
+  background-color: #2d2d2d;
+  gap: 10px;
+}
+
+.chat-input input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #444;
+  border-radius: 4px;
+  background-color: #1a1a1a;
+  color: #e0e0e0;
+  font-size: 14px;
+}
+
+.chat-input input:focus {
+  outline: none;
+  border-color: #bb86fc;
+}
+
+.chat-input input::placeholder {
+  color: #888;
+}
+
+.chat-input button {
+  padding: 10px 20px;
+  background-color: #bb86fc;
+  color: #121212;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s;
+}
+
+.chat-input button:hover {
+  background-color: #9b6ce0;
+}
+
+/* Matchmaking Page */
+.matchmaking-container.dark-theme {
+  background-color: #121212;
+  min-height: 100vh;
+  padding: 40px 20px;
+  text-align: center;
+  color: #e0e0e0;
+}
+
+.matchmaking-container.dark-theme h2 {
+  color: #ffffff;
+  margin-bottom: 30px;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .match-layout {
+    grid-template-columns: 1fr;
+    height: auto;
+  }
+  
+  .left-column, .right-column {
+    height: auto;
+  }
+  
+  .editor-section {
+    min-height: 300px;
+  }
 }

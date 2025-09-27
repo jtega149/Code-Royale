@@ -2,19 +2,26 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import Navbar from "../components/Navbar";
-import "./Styles/Login.css"
+import "./Styles/Login.css";
 
 export default function Login() {
-  const { user, login } = useAuth(); // Use Firebase login
+  const { user, login, signup } = useAuth();
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [isSignup, setIsSignup] = useState(false); // toggle login/signup
 
-  // Redirect if already logged in
   useEffect(() => {
-    if (user) navigate("/leaderboard");
+    if (user) {
+      const storedProfile = localStorage.getItem("profile");
+      if (storedProfile) {
+        navigate("/profile");
+      } else {
+        navigate("/leaderboard");
+      }
+    }
   }, [user, navigate]);
 
   const handleAuth = async (e) => {
@@ -27,10 +34,35 @@ export default function Login() {
     }
 
     try {
-      await login(email, password); // Firebase login
-      navigate("/leaderboard");
+      if (isSignup) {
+        await signup(email, password);
+      } else {
+        await login(email, password);
+      }
+
+      // create profile in localStorage if it doesn't exist
+      if (!localStorage.getItem("profile")) {
+        const newProfile = {
+          email,
+          name: email.split("@")[0],
+          trophies: 0,
+          wins: 0,
+          losses: 0,
+          winRate: "0%",
+          gamesPlayed: 0,
+          friends: 0,
+          globalRanking: 0,
+          recentMatches: [],
+          languagesUsed: [],
+          solvedProblems: [],
+          badges: [],
+        };
+        localStorage.setItem("profile", JSON.stringify(newProfile));
+      }
+
+      navigate("/profile");
     } catch (err) {
-      setError(err.message); // Show Firebase error messages
+      setError(err.message);
     }
   };
 
@@ -45,9 +77,9 @@ export default function Login() {
         </div>
 
         <form onSubmit={handleAuth} className="login-form">
-          <h3>Login</h3>
+          <h3>{isSignup ? "Sign Up" : "Login"}</h3>
 
-          {error && <p style={{ color: "red" }}>{error}</p>}
+          {error && <p style={{ color: "red", textAlign: "center" }}>{error}</p>}
 
           <label>Email</label>
           <input
@@ -67,18 +99,20 @@ export default function Login() {
             required
           />
 
-          <button type="submit">Login</button>
+          <button type="submit">{isSignup ? "Sign Up" : "Login"}</button>
 
           <p
             style={{
               marginTop: "20px",
               textAlign: "center",
               cursor: "pointer",
-              color: "#23a2f6"
+              color: "#23a2f6",
             }}
-            onClick={() => navigate("/signup")}
+            onClick={() => setIsSignup(!isSignup)}
           >
-            Don’t have an account? Sign Up
+            {isSignup
+              ? "Already have an account? Login"
+              : "Don't have an account? Sign Up"}
           </p>
         </form>
       </div>

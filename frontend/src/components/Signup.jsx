@@ -5,15 +5,15 @@ import Navbar from "../components/Navbar";
 import "./Styles/Signup.css";
 
 const Signup = () => {
-  const { user, signup } = useAuth(); // Use Firebase signup
+  const { user, signup } = useAuth(); 
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
   const [error, setError] = useState("");
 
-  // Redirect if already logged in
   useEffect(() => {
     if (user) navigate("/leaderboard");
   }, [user, navigate]);
@@ -22,7 +22,7 @@ const Signup = () => {
     e.preventDefault();
     setError("");
 
-    if (!email || !password || !confirm) {
+    if (!email || !password || !confirm || !username) {
       setError("Please fill out all fields");
       return;
     }
@@ -34,9 +34,28 @@ const Signup = () => {
 
     try {
       await signup(email, password); // Firebase signup
-      navigate("/leaderboard"); // Redirect on success
+
+      // Save profile in localStorage with username
+      const newProfile = {
+        email,
+        name: username,
+        trophies: 0,
+        wins: 0,
+        losses: 0,
+        winRate: "0%",
+        gamesPlayed: 0,
+        friends: 0,
+        globalRanking: 0,
+        recentMatches: [],
+        languagesUsed: [],
+        solvedProblems: [],
+        badges: [],
+      };
+      localStorage.setItem("profile", JSON.stringify(newProfile));
+
+      navigate("/leaderboard");
     } catch (err) {
-      setError(err.message); // Show Firebase errors (email in use, weak password, etc.)
+      setError(err.message);
     }
   };
 
@@ -58,7 +77,16 @@ const Signup = () => {
           type="email"
           placeholder="Email"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={e => setEmail(e.target.value)}
+          required
+        />
+
+        <label>Username</label>
+        <input
+          type="text"
+          placeholder="Choose a username"
+          value={username}
+          onChange={e => setUsername(e.target.value)}
           required
         />
 
@@ -67,7 +95,7 @@ const Signup = () => {
           type="password"
           placeholder="Password"
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={e => setPassword(e.target.value)}
           required
         />
 
@@ -76,7 +104,7 @@ const Signup = () => {
           type="password"
           placeholder="Confirm Password"
           value={confirm}
-          onChange={(e) => setConfirm(e.target.value)}
+          onChange={e => setConfirm(e.target.value)}
           required
         />
 

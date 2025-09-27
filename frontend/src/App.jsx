@@ -12,6 +12,7 @@ import LiveMatch from "./pages/LiveMatch";
 import Friend_play from "./pages/Friend_play"; 
 import { AuthProvider } from "./context/AuthContext"; // ✅ wrap app with this
 import "./App.css";
+import PlayProblem from "./pages/PlayProblem";
 
 function App() {
   console.log(import.meta.env.VITE_apiKey);
@@ -30,6 +31,7 @@ function App() {
             <Route path="/match" element={<Match />} />
             <Route path="/match/livematch" element={<LiveMatch />} />
             <Route path="/friend-play" element={<Friend_play />} />
+            <Route path="/play-problem" element={<PlayProblem />} />
           </Routes>
         </div>
       </Router>

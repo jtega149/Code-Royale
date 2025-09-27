@@ -32,25 +32,19 @@ const Match = () => {
       title: "Practice Mode", 
       icon: <FaBook />, 
       description: "Solve problems without pressure.",
-      onClick: () => alert("Feature coming soon!")
+      onClick: () => navigate("/practice")
     },
     { 
       title: "Play Specific Problem", 
       icon: <FaSearch />, 
       description: "Pick a problem to compete on.",
-      onClick: () => alert("Feature coming soon!")
-    },
-    { 
-      title: "Play Specific Topic", 
-      icon: <FaLayerGroup />, 
-      description: "Focus on a particular topic.",
-      onClick: () => alert("Feature coming soon!")
+      onClick: () => navigate("/play-problem")
     },
     { 
       title: "View Leaderboard", 
       icon: <FaTrophy />, 
       description: "Check top players worldwide.",
-      onClick: () => alert("Feature coming soon!")
+      onClick: () => navigate("/leaderboard")
     },
   ];
 
