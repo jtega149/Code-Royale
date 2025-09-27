@@ -1,6 +1,6 @@
 // src/pages/Match.jsx
 import React from "react";
-import { useNavigate } from "react-router-dom"; // keep only one import
+import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import { 
   FaGlobe, 
@@ -20,46 +20,39 @@ const Match = () => {
       title: "Play Online", 
       icon: <FaGlobe />, 
       description: "Compete with random players online.",
-      onClick: () => navigate("/match/livematch") // navigate to LiveMatch page
+      onClick: () => navigate("/match/livematch")
     },
     { 
       title: "Play a Friend", 
       icon: <FaUserFriends />, 
       description: "Challenge your friends directly.",
-      onClick: () => alert("Feature coming soon!") 
+      onClick: () => navigate("/friend-play")
     },
     { 
       title: "Practice Mode", 
       icon: <FaBook />, 
       description: "Solve problems without pressure.",
-      onClick: () => alert("Feature coming soon!") 
+      onClick: () => alert("Feature coming soon!")
     },
     { 
       title: "Play Specific Problem", 
       icon: <FaSearch />, 
       description: "Pick a problem to compete on.",
-      onClick: () => alert("Feature coming soon!") 
+      onClick: () => alert("Feature coming soon!")
     },
     { 
       title: "Play Specific Topic", 
       icon: <FaLayerGroup />, 
       description: "Focus on a particular topic.",
-      onClick: () => alert("Feature coming soon!") 
+      onClick: () => alert("Feature coming soon!")
     },
     { 
       title: "View Leaderboard", 
       icon: <FaTrophy />, 
       description: "Check top players worldwide.",
-      onClick: () => alert("Feature coming soon!") 
+      onClick: () => alert("Feature coming soon!")
     },
   ];
-
-  const handleSelect = (title) => {
-    if (title === "Play a Friend") {
-      navigate("/friend-play");
-    }
-    // Add other navigation logic if needed in the future
-  };
 
   return (
     <>
@@ -74,7 +67,7 @@ const Match = () => {
               <p>{option.description}</p>
               <button
                 className="play-button"
-                onClick={() => handleSelect(option.title)}
+                onClick={option.onClick}
               >
                 Select
               </button>
