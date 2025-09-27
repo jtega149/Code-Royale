@@ -38,7 +38,7 @@ const Match = () => {
       title: "Play Specific Problem", 
       icon: <FaSearch />, 
       description: "Pick a problem to compete on.",
-      onClick: () => alert("Feature coming soon!")
+      onClick: () => navigate("/play-problem")
     },
     { 
       title: "Play Specific Topic", 
