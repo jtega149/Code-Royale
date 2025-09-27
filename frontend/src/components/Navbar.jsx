@@ -1,10 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useAuth } from "../context/AuthContext"; // Import auth context
 import "./Styles/Navbar.css";
 
-let isLoggedIn = false; // This should be replaced with actual authentication logic
-
 const Navbar = () => {
+  const { user } = useAuth(); // Get current user
+
   return (
     <nav className="navbar">
       <div className="navbar-logo">
@@ -15,19 +16,21 @@ const Navbar = () => {
           <Link to="/">Home</Link>
         </li>
         <li>
-          <Link to={isLoggedIn ? "/leaderboard" : "/login"}>Leaderboard</Link>
+          <Link to={user ? "/leaderboard" : "/login"}>Leaderboard</Link>
         </li>
         <li>
-          <Link to={isLoggedIn ? "/practice" : "/login"}>Practice</Link>
+          <Link to={user ? "/practice" : "/login"}>Practice</Link>
         </li>
         <li>
-          <Link to={isLoggedIn ? "/profile" : "/login"}>Profile</Link>
+          <Link to={user ? "/profile" : "/login"}>Profile</Link>
         </li>
       </ul>
-      <div className="navbar-auth">
-        <Link to="/login" className="login-btn">Login</Link>
-        <Link to="/signup" className="signup-btn">Sign Up</Link>
-      </div>
+      {!user && (
+        <div className="navbar-auth">
+          <Link to="/login" className="login-btn">Login</Link>
+          <Link to="/signup" className="signup-btn">Sign Up</Link>
+        </div>
+      )}
     </nav>
   );
 };
