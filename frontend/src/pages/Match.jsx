@@ -1,6 +1,6 @@
 // src/pages/Match.jsx
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom"; // keep only one import
 import Navbar from "../components/Navbar";
 import { 
   FaGlobe, 
@@ -10,7 +10,6 @@ import {
   FaLayerGroup, 
   FaTrophy 
 } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
 import "./Styles/Match.css";
 
 const Match = () => {
