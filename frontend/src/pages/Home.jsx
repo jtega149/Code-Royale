@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom"; 
 import Navbar from "../components/Navbar";
-import "./Home.css";
+import "./Styles/Home.css";
 import background from "../Photos/HP_bkg.png";
 
 export default function Home() {
@@ -9,6 +9,10 @@ export default function Home() {
 
   const goToMatch = () => {
     navigate("/match");
+  };
+
+  const goToPractice = () => {
+    navigate("/practice");
   };
 
   return (
@@ -36,7 +40,9 @@ export default function Home() {
             <button className="btn play" onClick={goToMatch}>
               Start a Match
             </button>
-            <button className="btn about">Practice Problems</button>
+            <button className="btn about" onClick={goToPractice}>
+              Practice Problems
+            </button>
           </div>
         </div>
       </section>

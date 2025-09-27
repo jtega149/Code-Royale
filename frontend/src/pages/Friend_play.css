@@ -1,0 +1,73 @@
+/* Base page */
+.friend-play-page {
+  font-family: "Segoe UI", sans-serif;
+  color: white;
+  background-color: #0d1b2a;
+  min-height: 100vh;
+}
+
+/* Content wrapper */
+.content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  text-align: center;
+}
+
+/* Options container */
+.friend-options {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 40px;
+  margin-top: 40px;
+}
+
+/* Individual card */
+.option-card-container {
+  background-color: #112d4e;
+  padding: 30px;
+  border-radius: 12px;
+  min-width: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.option-card-container h2 {
+  margin-bottom: 15px;
+}
+
+/* Inputs */
+.option-card-container input {
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  font-size: 1rem;
+  outline: none;
+}
+
+/* Buttons */
+.option-card-container button {
+  padding: 12px 20px;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  background-color: #23a2f6;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.option-card-container button:hover {
+  background-color: #1845ad;
+}
+
+/* Waiting screen */
+.waiting-screen {
+  background-color: #112d4e;
+  padding: 40px;
+  border-radius: 12px;
+  margin-top: 50px;
+}
