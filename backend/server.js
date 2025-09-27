@@ -85,61 +85,59 @@ socket.on("joinQueue", (userData) => {
   });
 
   // Join a specific match room (for existing matches)
-  socket.on("joinMatch", (matchId) => {
-    console.log(`Attempting to join existing match: ${matchId}`);
-    
-    if (activeMatches.has(matchId)) {
-      const match = activeMatches.get(matchId);
-      
-      // Leave any previous rooms
-      const previousRooms = Array.from(socket.rooms).filter(room => room !== socket.id);
-      previousRooms.forEach(room => {
-        socket.leave(room);
-        console.log(`Socket ${socket.id} left room ${room}`);
-      });
+  // Join a specific match room
+socket.on("joinMatch", (matchId) => {
+  const match = activeMatches.get(matchId);
+  if (!match) {
+    socket.emit("matchError", { error: "Match not found" });
+    return;
+  }
 
-      // Join the match room
-      socket.join(matchId);
-      
-      // Track user in room
-      if (!matchRooms.has(matchId)) {
-        matchRooms.set(matchId, new Set());
-      }
-      matchRooms.get(matchId).add(socket.id);
-      
-      console.log(`Socket ${socket.id} joined match ${matchId}`);
-      socket.emit("matchJoined", { 
-        matchId, 
-        players: match.players,
-        problem: match.problem 
-      });
-    } else {
-      socket.emit("matchError", { error: "Match not found" });
-    }
+  // Leave any previous rooms (except socket.id)
+  Array.from(socket.rooms)
+    .filter((room) => room !== socket.id)
+    .forEach((room) => socket.leave(room));
+
+  // Join the match room
+  socket.join(matchId);
+
+  // Track user in room
+  if (!matchRooms.has(matchId)) matchRooms.set(matchId, new Set());
+  matchRooms.get(matchId).add(socket.id);
+
+  console.log(`Socket ${socket.id} joined room ${matchId}`);
+
+  // Notify the user that they've successfully joined
+  socket.emit("matchJoined", {
+    matchId,
+    players: match.players,
+    problem: match.problem,
   });
+});
+
 
   // Receive chat message
-  socket.on("sendMessage", (data) => {
-    try {
-      const { matchId, message, user } = data;
-      
-      if (!matchId || !message || !user) {
-        console.error('Invalid message data:', data);
-        return;
-      }
-      
-      const rooms = Array.from(socket.rooms);
-      if (rooms.includes(matchId)) {
-        socket.to(matchId).emit("receiveMessage", { 
-          message, 
-          user, 
-          timestamp: new Date() 
-        });
-      }
-    } catch (error) {
-      console.error('Error handling sendMessage:', error);
-    }
+  // Receive chat message and broadcast to the room
+socket.on("sendMessage", (data) => {
+  const { matchId, message, user } = data;
+
+  console.error("MatchId:", matchId);
+  console.error("Message:", message);
+  console.error("User:", user);
+
+  if (!matchId || !message || !user) {
+    console.error("Invalid message data:", data);
+    return;
+  }
+
+  // Broadcast to all sockets in the room, including sender
+  io.in(matchId).emit("receiveMessage", {
+    message,
+    user,
+    timestamp: new Date(),
   });
+});
+
 
   // Receive code updates
   socket.on("codeUpdate", (data) => {

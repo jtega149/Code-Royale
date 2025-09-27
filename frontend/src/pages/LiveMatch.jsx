@@ -76,16 +76,25 @@ const LiveMatch = () => {
   };
 
   const sendMessage = (messageInput, setMessageInput) => {
-    if (!messageInput.trim()) return;
+    if (!messageInput.trim() || !currentMatch) {
+      console.warn("Cannot send message: match not initialized yet");
+      return;
+    }
+    console.log("Current match:", currentMatch); // Debug log
+
     const msgData = {
-      matchId: currentMatch.id,
+      matchId: currentMatch.matchId,   // safe now
       message: messageInput,
       user: currentUserRef.current.displayName,
     };
+
     socketRef.current.emit("sendMessage", msgData);
-    setChatMessages((prev) => [...prev, { ...msgData, timestamp: new Date() }]);
+
+    // Add message locally for instant feedback
+    setChatMessages(prev => [...prev, { ...msgData, timestamp: new Date() }]);
     setMessageInput("");
   };
+
 
   const handleCodeChange = (newCode) => {
     setUserCode(newCode);
