@@ -5,6 +5,7 @@ import CodeMirror from "@uiw/react-codemirror";
 import { javascript } from "@codemirror/lang-javascript";
 import { python } from "@codemirror/lang-python";
 import { java } from "@codemirror/lang-java";
+import LeetcodeProblems from "../LeetcodePoblems";
 
 const Practice = () => {
   const [difficulty, setDifficulty] = useState("");
@@ -14,13 +15,16 @@ const Practice = () => {
   const [code, setCode] = useState("");
   const [output, setOutput] = useState("");
   const [canRun, setCanRun] = useState(true);
+  const [currentProblem, setCurrentProblem] = useState(null);
 
   const timerDurations = { easy: 300, medium: 600, hard: 900 };
 
+  // Set timer when difficulty/language selected
   useEffect(() => {
     if (difficulty && language) setTimeLeft(timerDurations[difficulty]);
   }, [difficulty, language]);
 
+  // Timer countdown
   useEffect(() => {
     if (timeLeft === null) return;
     if (timeLeft <= 0) {
@@ -30,6 +34,17 @@ const Practice = () => {
     const timer = setInterval(() => setTimeLeft((prev) => prev - 1), 1000);
     return () => clearInterval(timer);
   }, [timeLeft]);
+
+  // Randomly select problem
+  useEffect(() => {
+    if (difficulty) {
+      const problemsArray = Object.values(
+        LeetcodeProblems[difficulty.charAt(0).toUpperCase() + difficulty.slice(1)]
+      );
+      const randomProblem = problemsArray[Math.floor(Math.random() * problemsArray.length)];
+      setCurrentProblem(randomProblem);
+    }
+  }, [difficulty, problemNumber]);
 
   const formatTime = (seconds) => {
     const m = Math.floor(seconds / 60);
@@ -50,51 +65,80 @@ const Practice = () => {
     }
   };
 
+  // Run user code against test cases
   const runCode = async () => {
     if (!canRun) {
       alert("Please wait a few seconds before running again.");
       return;
     }
-
     setCanRun(false);
     setTimeout(() => setCanRun(true), 5000);
 
-    setOutput("Running code...");
+    if (!currentProblem) return;
+
+    setOutput("Running code on test cases...");
 
     try {
-      const data = JSON.stringify({
-        language: language,
-        files: [{ name: "main", content: code }],
-      });
+      const tests = currentProblem.tests;
+      let results = "";
 
-      const response = await fetch(
-        "https://onecompiler-apis.p.rapidapi.com/api/v1/run",
-        {
+      for (let i = 0; i < tests.length; i++) {
+        const test = tests[i];
+        let userOutput = "";
+
+        // Prepare code execution
+        let content = code;
+
+        if (language === "python") {
+          content = `
+def user_func():
+${code.split("\n").map((l) => "    " + l).join("\n")}
+result = user_func()
+print(result)
+`;
+        } else if (language === "javascript") {
+          content = `
+function userFunc() {
+${code.split("\n").map((l) => "  " + l).join("\n")}
+}
+console.log(userFunc());
+`;
+        } else if (language === "java") {
+          content = `
+public class Main {
+  public static Object userFunc() {
+${code.split("\n").map((l) => "    " + l).join("\n")}
+  }
+  public static void main(String[] args) {
+    System.out.println(userFunc());
+  }
+}
+`;
+        }
+
+        const data = JSON.stringify({
+          language: language,
+          files: [{ name: "main", content }],
+        });
+
+        const response = await fetch("https://onecompiler-apis.p.rapidapi.com/api/v1/run", {
           method: "POST",
           headers: {
-            "x-rapidapi-key":
-              "81cd88f2b5mshead5861260f3e6cp17b68bjsnfd5fccc343dc",
+            "x-rapidapi-key": "81cd88f2b5mshead5861260f3e6cp17b68bjsnfd5fccc343dc",
             "x-rapidapi-host": "onecompiler-apis.p.rapidapi.com",
             "Content-Type": "application/json",
           },
           body: data,
-        }
-      );
+        });
 
-      if (!response.ok) {
-        if (response.status === 403)
-          throw new Error("API key invalid or unauthorized.");
-        if (response.status === 429)
-          throw new Error("Rate limit exceeded. Please wait.");
-        throw new Error(`Error: ${response.status}`);
+        const result = await response.json();
+        userOutput = result.stdout ? result.stdout.trim() : result.stderr || "No output";
+
+        const passFail = userOutput == JSON.stringify(test.output) || userOutput == test.output ? "Passed" : "Failed";
+        results += `Test Case ${i + 1}: ${passFail}\nInput: ${JSON.stringify(test.input)}\nExpected: ${JSON.stringify(test.output)}\nOutput: ${userOutput}\n\n`;
       }
 
-      const result = await response.json();
-
-      if (result.stdout) setOutput(result.stdout);
-      else if (result.stderr) setOutput(`Error:\n${result.stderr}`);
-      else if (result.output) setOutput(result.output);
-      else setOutput("No output returned. Make sure your code prints/logs something.");
+      setOutput(results);
     } catch (err) {
       setOutput(err.message);
     }
@@ -110,15 +154,13 @@ const Practice = () => {
   return (
     <div className="practice-page">
       <Navbar />
-
       <div className="content">
         <h1>Practice Problems</h1>
 
-        {/* Difficulty first, then language */}
+        {/* Difficulty & language selection */}
         {!(difficulty && language) && (
           <div className="options professional-options">
             <h2>Select Difficulty & Language</h2>
-
             <div className="option-cards">
               <div
                 className={`option-card easy ${difficulty === "easy" ? "selected" : ""}`}
@@ -145,17 +187,13 @@ const Practice = () => {
                 <h3 style={{ marginTop: "20px" }}>Select Language</h3>
                 <div className="option-cards">
                   <div
-                    className={`option-card javascript ${
-                      language === "javascript" ? "selected" : ""
-                    }`}
+                    className={`option-card javascript ${language === "javascript" ? "selected" : ""}`}
                     onClick={() => setLanguage("javascript")}
                   >
                     JavaScript
                   </div>
                   <div
-                    className={`option-card python ${
-                      language === "python" ? "selected" : ""
-                    }`}
+                    className={`option-card python ${language === "python" ? "selected" : ""}`}
                     onClick={() => setLanguage("python")}
                   >
                     Python
@@ -173,7 +211,7 @@ const Practice = () => {
         )}
 
         {/* Main problem display */}
-        {difficulty && language && (
+        {difficulty && language && currentProblem && (
           <>
             <div className="practice-header">
               <h2>Problem {problemNumber}</h2>
@@ -185,9 +223,7 @@ const Practice = () => {
                 <h3>
                   {difficulty.toUpperCase()} Problem ({language.toUpperCase()})
                 </h3>
-                <p>
-                  Placeholder problem description. Will load from JSON later with 2 test cases.
-                </p>
+                <p>{currentProblem.description}</p>
               </div>
 
               <div className="practice-editor">
@@ -195,7 +231,7 @@ const Practice = () => {
                   value={code}
                   height="500px"
                   extensions={[getLanguageExtension()]}
-                  theme="dark"  
+                  theme="dark"
                   onChange={(value) => setCode(value)}
                   style={{ textAlign: "left" }}
                 />

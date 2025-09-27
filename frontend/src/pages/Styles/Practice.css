@@ -79,19 +79,26 @@
 }
 
 /* Timer colors */
-.timer-yellow {
-  color: #f0a500;
+.timer {
+  color: #00ff99; /* default color when > 2 minutes */
 }
-.timer-red {
-  color: #ff512f;
+
+.timer.yellow {
+  color: #f0a500; /* 2 minutes or less */
 }
+
+.timer.red {
+  color: #ff512f; /* 1 minute or less */
+}
+
+.timer.flashing {
+  animation: flashRed 1s infinite; /* 30 seconds or less */
+}
+
 @keyframes flashRed {
   0% { color: #ff0000; }
   50% { color: #800000; }
   100% { color: #ff0000; }
-}
-.timer-flash {
-  animation: flashRed 1s infinite;
 }
 
 /* Practice body layout */
