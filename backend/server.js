@@ -1,22 +1,40 @@
+// backend/server.js
 import express from "express";
+import http from "http";
+import { Server } from "socket.io";
 import cors from "cors";
-import dotenv from "dotenv";
-
-dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+app.use(cors()); // allow all origins (adjust in production)
 
-// Middleware
-app.use(cors());
-app.use(express.json());
+const server = http.createServer(app);
 
-// Test route
-app.get("/", (req, res) => {
-  res.send("Backend is running!");
+const io = new Server(server, {
+  cors: {
+    origin: "*", // allow your frontend URL in production
+    methods: ["GET", "POST"],
+  },
 });
 
-// Start server
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+// Optional: simple room management
+io.on("connection", (socket) => {
+  console.log("A user connected:", socket.id);
+
+  // Join a match room
+  socket.on("joinMatch", (matchId) => {
+    socket.join(matchId);
+    console.log(`Socket ${socket.id} joined match ${matchId}`);
+  });
+
+  // Receive chat message and broadcast to the room
+  socket.on("sendMessage", ({ matchId, message, user }) => {
+    io.to(matchId).emit("receiveMessage", { message, user });
+  });
+
+  socket.on("disconnect", () => {
+    console.log("A user disconnected:", socket.id);
+  });
 });
+
+const PORT = process.env.PORT || 5001;
+server.listen(PORT, () => console.log(`Socket.io server running on port ${PORT}`));
