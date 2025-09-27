@@ -20,19 +20,39 @@ const LiveMatch = () => {
   const currentUserRef = useRef(null);
 
   // Initialize socket after auth
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        currentUserRef.current = { uid: user.uid, displayName: user.displayName || "Anonymous" };
-        initializeSocket();
+  // In LiveMatch.jsx, update the onAuthStateChanged callback
+useEffect(() => {
+  const unsubscribe = onAuthStateChanged(auth, (user) => {
+    if (user) {
+      // Try to get the profile name from localStorage
+      const storedProfile = localStorage.getItem("profile");
+      let displayName = "Anonymous"; // fallback
+      
+      if (storedProfile) {
+        try {
+          const profile = JSON.parse(storedProfile);
+          displayName = profile.name || user.displayName || "Anonymous";
+        } catch (error) {
+          console.error("Error parsing profile:", error);
+          displayName = user.displayName || "Anonymous";
+        }
+      } else {
+        displayName = user.displayName || "Anonymous";
       }
-    });
+      
+      currentUserRef.current = { 
+        uid: user.uid, 
+        displayName: displayName 
+      };
+      initializeSocket();
+    }
+  });
 
-    return () => {
-      if (socketRef.current) socketRef.current.disconnect();
-      unsubscribe();
-    };
-  }, []);
+  return () => {
+    if (socketRef.current) socketRef.current.disconnect();
+    unsubscribe();
+  };
+}, []);
 
   const initializeSocket = () => {
     socketRef.current = io("http://localhost:5001");
@@ -91,7 +111,7 @@ const LiveMatch = () => {
     socketRef.current.emit("sendMessage", msgData);
 
     // Add message locally for instant feedback
-    setChatMessages(prev => [...prev, { ...msgData, timestamp: new Date() }]);
+    //setChatMessages(prev => [...prev, { ...msgData, timestamp: new Date() }]);
     setMessageInput("");
   };
 
