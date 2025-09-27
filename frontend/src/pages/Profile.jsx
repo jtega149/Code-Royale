@@ -107,7 +107,6 @@ const Profile = () => {
         </div>
 
 
-
         <div className="profile-stats">
           {["Trophies", "Wins", "Losses", "Win Rate", "Games Played", "Friends", "Global Ranking"].map(
             (stat, idx) => (
