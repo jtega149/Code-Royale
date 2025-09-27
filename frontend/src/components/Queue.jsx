@@ -1,79 +1,86 @@
 // src/components/Queue.jsx
-import React, { useState, useEffect } from 'react';
-import { auth } from '../firebase';
+import React, { useEffect, useState } from "react";
 
-const Queue = ({ onMatchFound, onCancel }) => {
-  const [queueStatus, setQueueStatus] = useState('idle'); // idle, waiting, matched, error
-  const [position, setPosition] = useState(0);
-  const [estimatedWait, setEstimatedWait] = useState(0);
-  const [socket, setSocket] = useState(null);
+const Queue = ({ socket, socketReady, currentUser, onMatchFound, onCancel }) => {
+  const [queueStatus, setQueueStatus] = useState("idle");
+  const [position, setPosition] = useState(null);
+  const [estimatedWait, setEstimatedWait] = useState(null);
+  const [queueLength, setQueueLength] = useState(0);
 
   useEffect(() => {
-    // Socket connection would be passed as prop or from context
-    // For now, we'll assume it's passed as prop
-    return () => {
-      if (socket) {
-        socket.emit('leaveQueue', { userId: auth.currentUser?.uid });
+    if (!socket) return;
+
+    socket.on("queueStatus", (data) => {
+      console.log("Queue status:", data);
+      if (data.status === "joined") {
+        setQueueStatus("joined");
+        setPosition(data.position);
+        setEstimatedWait(data.estimatedWait);
+      } else if (data.status === "already_in_queue") {
+        setQueueStatus("joined");
+      } else if (data.status === "left") {
+        setQueueStatus("idle");
+      } else if (data.status === "error") {
+        alert(`Queue error: ${data.error}`);
+        setQueueStatus("idle");
       }
+    });
+
+    socket.on("queueUpdated", (data) => {
+      setQueueLength(data.length);
+    });
+
+    socket.on("matchFound", (matchData) => {
+      onMatchFound(matchData);
+    });
+
+    return () => {
+      socket.off("queueStatus");
+      socket.off("queueUpdated");
+      socket.off("matchFound");
     };
-  }, [socket]);
+  }, [socket, onMatchFound]);
 
   const joinQueue = () => {
-    if (!auth.currentUser) {
-      alert('Please sign in to join queue');
+    if (!socket || !socket.connected) {
+      alert("Socket not ready yet. Please wait...");
       return;
     }
-
-    const userData = {
-      userId: auth.currentUser.uid,
-      username: auth.currentUser.displayName || auth.currentUser.email,
-      skillLevel: 1 // You can implement skill rating system
-    };
-
-    socket.emit('joinQueue', userData);
-    setQueueStatus('waiting');
+    if (!currentUser) {
+      alert("User not ready yet. Try again in a moment.");
+      return;
+    }
+    socket.emit("joinQueue", {
+      userId: currentUser.uid,
+      username: currentUser.displayName,
+      skillLevel: 1,
+    });
+    setQueueStatus("waiting");
   };
 
   const leaveQueue = () => {
-    if (socket) {
-      socket.emit('leaveQueue', { userId: auth.currentUser?.uid });
-    }
-    setQueueStatus('idle');
-    onCancel?.();
+    if (!socket) return;
+    socket.emit("leaveQueue");
+    setQueueStatus("idle");
+    if (onCancel) onCancel();
   };
-
-  // Socket event listeners would be set up in parent component
 
   return (
     <div className="queue-container">
-      {queueStatus === 'idle' && (
-        <button onClick={joinQueue} className="join-queue-btn">
-          Join Matchmaking Queue
+      <p>Players currently in queue: {queueLength}</p>
+
+      {queueStatus === "idle" && (
+        <button onClick={joinQueue} disabled={!socketReady}>
+          {socketReady ? "Join Queue" : "Connecting..."}
         </button>
       )}
 
-      {queueStatus === 'waiting' && (
-        <div className="waiting-container">
-          <div className="searching-animation">
-            <span>Searching for opponent</span>
-            <div className="loading-dots">
-              <span>.</span>
-              <span>.</span>
-              <span>.</span>
-            </div>
-          </div>
-          <p>Position in queue: {position}</p>
-          <p>Estimated wait: {estimatedWait} seconds</p>
-          <button onClick={leaveQueue} className="leave-queue-btn">
-            Cancel Search
-          </button>
-        </div>
-      )}
-
-      {queueStatus === 'matched' && (
-        <div className="match-found">
-          <h3>Match Found!</h3>
-          <p>Connecting to match...</p>
+      {(queueStatus === "waiting" || queueStatus === "joined") && (
+        <div>
+          <p>{queueStatus === "waiting" ? "Waiting for an opponent..." : "You're in the queue!"}</p>
+          {position && <p>Position: {position}</p>}
+          {estimatedWait && <p>Estimated wait: {estimatedWait} seconds</p>}
+          <button onClick={leaveQueue}>Leave Queue</button>
         </div>
       )}
     </div>

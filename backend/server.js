@@ -27,47 +27,52 @@ io.on("connection", (socket) => {
   console.log("A user connected:", socket.id);
 
   // Join matchmaking queue
-  socket.on("joinQueue", (userData) => {
-    try {
-      const { userId, username, skillLevel = 1 } = userData;
-      
-      // Check if user is already in queue
-      const alreadyInQueue = matchmakingQueue.find(entry => entry.userId === userId);
-      if (alreadyInQueue) {
-        socket.emit("queueStatus", { status: "already_in_queue" });
-        return;
-      }
-
-      // Add user to queue
-      const queueEntry = {
-        socketId: socket.id,
-        userId,
-        username,
-        skillLevel,
-        joinedAt: new Date()
-      };
-      
-      matchmakingQueue.push(queueEntry);
-      console.log(`User ${username} joined queue. Queue length: ${matchmakingQueue.length}`);
-      
-      socket.emit("queueStatus", { 
-        status: "joined", 
-        position: matchmakingQueue.length,
-        estimatedWait: matchmakingQueue.length * 10 // rough estimate in seconds
-      });
-
-      // Try to match players
-      attemptMatchmaking();
-
-      // Leave any previous rooms
-      const previousRooms = Array.from(socket.rooms).filter(room => room !== socket.id);
-      previousRooms.forEach(room => socket.leave(room));
-      
-    } catch (error) {
-      console.error('Error joining queue:', error);
-      socket.emit("queueStatus", { status: "error", error: error.message });
+  // Join matchmaking queue
+socket.on("joinQueue", (userData) => {
+  try {
+    const { userId, username, skillLevel = 1 } = userData;
+    
+    // Check if user is already in queue
+    const alreadyInQueue = matchmakingQueue.find(entry => entry.userId === userId);
+    if (alreadyInQueue) {
+      socket.emit("queueStatus", { status: "already_in_queue" });
+      return;
     }
-  });
+
+    // Add user to queue
+    const queueEntry = {
+      socketId: socket.id,
+      userId,
+      username,
+      skillLevel,
+      joinedAt: new Date()
+    };
+    
+    matchmakingQueue.push(queueEntry);
+    console.log(`User ${username} joined queue. Queue length: ${matchmakingQueue.length}`);
+    
+    // Emit to client: confirmed in queue
+    socket.emit("queueStatus", { 
+      status: "joined", 
+      position: matchmakingQueue.length,
+      estimatedWait: matchmakingQueue.length * 10
+    });
+
+    // Optionally broadcast to everyone else that queue length changed
+    io.emit("queueUpdated", { length: matchmakingQueue.length });
+
+    // Try to match players
+    attemptMatchmaking();
+
+    // Leave any previous rooms
+    const previousRooms = Array.from(socket.rooms).filter(room => room !== socket.id);
+    previousRooms.forEach(room => socket.leave(room));
+    
+  } catch (error) {
+    console.error('Error joining queue:', error);
+    socket.emit("queueStatus", { status: "error", error: error.message });
+  }
+});
 
   // Leave matchmaking queue
   socket.on("leaveQueue", (userData) => {
