@@ -9,10 +9,8 @@ import Practice from "./pages/Practice";
 import Match from "./pages/Match";
 import LiveMatch from "./pages/LiveMatch";
 import { initializeApp } from "firebase/app";
-
 import ReactDOM from "react-dom";
 import { AuthProvider } from "./context/AuthContext";
-
 import { getAnalytics } from "firebase/analytics";
 import { useState } from 'react'
 
@@ -30,13 +28,6 @@ import "./App.css";
 function App() {
 
   console.log(import.meta.env.VITE_apiKey)
-
-
-
-
-
-
-
 
   return (
     //<AuthProvider>
