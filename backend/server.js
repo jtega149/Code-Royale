@@ -34,6 +34,11 @@ io.on("connection", (socket) => {
   socket.on("disconnect", () => {
     console.log("A user disconnected:", socket.id);
   });
+
+    // Receive code updates and broadcast to the room
+    socket.on("codeUpdate", ({ matchId, code }) => {
+      socket.to(matchId).emit("codeUpdate", code);
+    });
 });
 
 const PORT = process.env.PORT || 5001;
