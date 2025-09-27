@@ -7,6 +7,7 @@ import Leaderboard from "./pages/Leaderboard";
 import Profile from "./pages/Profile";
 import Practice from "./pages/Practice";
 import Match from "./pages/Match";
+import LiveMatch from "./pages/LiveMatch";
 import { initializeApp } from "firebase/app";
 
 import ReactDOM from "react-dom";
