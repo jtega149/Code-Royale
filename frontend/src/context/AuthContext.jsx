@@ -1,65 +1,57 @@
 // src/context/AuthContext.js
-import { createContext, useContext, useState } from "react";
-import {
-  GoogleAuthProvider,
-  GithubAuthProvider,
-  connectAuthEmulator,
-  getAuth,
-  onAuthStateChanged,
-  signInWithPopup,
-  signOut,
-} from 'firebase/auth';
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-
+import React, { createContext, useContext, useState } from "react";
 
 const AuthContext = createContext(null);
 
-export function AuthProvider({ children }) {
-  const [oauthToken, updateOauthToken] = useState({ textContent: "" });
-  
-  const [signInStatus, updateSignInStatus] = useState({ textContent: "Sign in" });
-  
-  const [accountDetails, updateAccountDetails] = useState({ textContent: "" });
+export const AuthProvider = ({ children }) => {
+  const [user, setUser] = useState(null); // user state
+  const [oauthToken, setOauthToken] = useState(null);
+  const [signInStatus, setSignInStatus] = useState(false);
+  const [accountDetails, setAccountDetails] = useState(null);
 
-  const firebaseConfig = {
-        apiKey: import.meta.env.VITE_apiKey,
-        authDomain: import.meta.env.VITE_authDomain,
-        projectId: import.meta.env.VITE_projectId,
-        storageBucket: import.meta.env.VITE_storageBucket,
-        messagingSenderId: import.meta.env.VITE_messagingSenderId,
-        appId: import.meta.env.VITE_appId,
-        measurementId: import.meta.env.VITE_measurementId
-      };
-
-  const app = initializeApp(firebaseConfig);
-   const auth = getAuth();
-  
-    const analytics = getAnalytics(app);
-
-    
-
-      
-
+  // login + logout handlers
   const login = (userData) => {
     setUser(userData);
-    // optionally persist token in localStorage
-    
+    setSignInStatus(true);
   };
 
   const logout = () => {
     setUser(null);
-    // clear storage, invalidate token, etc.
+    setOauthToken(null);
+    setSignInStatus(false);
+    setAccountDetails(null);
+  };
+
+  // helper updaters
+  const updateAccountDetails = (details) => {
+    setAccountDetails(details);
+  };
+
+  const updateSignInStatus = (status) => {
+    setSignInStatus(status);
+  };
+
+  const updateOauthToken = (token) => {
+    setOauthToken(token);
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        login,
+        logout,
+        oauthToken,
+        signInStatus,
+        accountDetails,
+        updateAccountDetails,
+        updateSignInStatus,
+        updateOauthToken,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
-}
+};
 
-// handy hook so you don’t repeat `useContext`
-export function useAuth() {
-  return useContext(AuthContext);
-}
+export const useAuth = () => useContext(AuthContext);

@@ -1,124 +1,56 @@
-import React from "react";
-import "./Styles/Login.css";
-import { useState } from 'react';
+// src/pages/Login.jsx
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
+export default function Login() {
+  const { user, login, logout } = useAuth(); // now works
+  const navigate = useNavigate();
 
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-// Needs to be moved to the root 
+  const handleLogin = (e) => {
+    e.preventDefault();
 
-import {
-  GithubAuthProvider,  
-  onAuthStateChanged,
-  signInWithPopup,
-  signOut,
-} from 'firebase/auth';
+    // fake login logic (replace with real API call later)
+    const fakeUser = { email };
+    login(fakeUser);
 
-
-
-const Login = () => {
-  // console.log(import.meta.env)
-  // console.log(import.meta.env.apiKey)
-  // Make environment files
-  
-  const { user, logout, updateAccountDetails, updateSignInStatus, updateOauthToken } = useAuth();
-
-  
-  const [signInButton, updateSignInButton] = useState({ textContent: "Sign in with GitHub" });
-
-  
-
-  function toggleSignIn(method) {
-
-    // Check if the user is authenticated 
-    if (!auth.currentUser) {
-      console.log("Log In method called")
-      const provider = new GithubAuthProvider();
-      provider.addScope('repo');
-      signInWithPopup(auth, provider)
-        .then(function (result) {
-          const credential = GithubAuthProvider.credentialFromResult(result);
-          // This gives you a GitHub Access Token. You can use it to access the GitHub API.
-          const token = credential?.accessToken;
-          // The signed-in user info.
-          const user = result.user;
-          updateOauthToken({ textContent: token ?? '' });
-        })
-        .catch(function (error) {
-          // Handle Errors here.
-          const errorCode = error.code;
-          const errorMessage = error.message;
-          // The email of the user's account used.
-          const email = error.email;
-          // The firebase.auth.AuthCredential type that was used.
-          const credential = error.credential;
-          if (errorCode === 'auth/account-exists-with-different-credential') {
-            alert(
-              'You have already signed up with a different auth provider for that email.',
-            );
-            // If you are using multiple auth providers on your app you should handle linking
-            // the user's accounts here.
-          } else {
-            console.error(error);
-          }
-        });
-    } else {
-      signOut(auth);
-    }
-    updateSignInButton({ ...signInButton, disabled: true });
-  }
-
-
-  // Listening for auth state changes.
-  onAuthStateChanged(auth, function (user) {
-    if (user) {
-      // User is signed in.
-      const displayName = user.displayName;
-      const email = user.email;
-      const emailVerified = user.emailVerified;
-      const photoURL = user.photoURL;
-      const isAnonymous = user.isAnonymous;
-      const uid = user.uid;
-      const providerData = user.providerData;
-      updateSignInStatus({ textContent: 'Signed in' });
-      updateSignInButton({ textContent: 'Sign out' });
-      updateAccountDetails({ textContent: JSON.stringify(user, null, '  ') });
-    } else {
-      // User is signed out.
-      updateSignInStatus({ textContent: 'Signed out' });
-      updateSignInButton({ textContent: 'Sign in with GitHub' });
-      updateAccountDetails({ textContent: 'null' });
-      updateOauthToken({ textContent: 'null' });
-    }
-    signInButton.disabled = false;
-  });
-
+    // go to leaderboard after login
+    navigate("/leaderboard");
+  };
 
   return (
-    <div className="login-container">
-      <div className="background">
-        <div className="shape"></div>
-        <div className="shape"></div>
-      </div>
+    <div className="login-page">
+      <h1>{user ? `Welcome ${user.email}` : "Login"}</h1>
 
-      <form className="login-form">
-        <h3>Login Here</h3>
+      {!user ? (
+        <form onSubmit={handleLogin}>
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
 
-        <label htmlFor="email">Email</label>
-        <input type="text" placeholder="Email or Phone" id="email" />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
 
-        <label htmlFor="password">Password</label>
-        <input type="password" placeholder="Password" id="password" />
-
-        <button onClick={()=> toggleSignIn("Email")} type="submit">Log In</button>
-
-        <div className="social">
-          <div className="google" onClick={() =>{toggleSignIn("Google")}}>Google</div>
-          <div className="github" onClick={() =>{toggleSignIn("Github")}}>GitHub</div>
+          <button type="submit">Login</button>
+        </form>
+      ) : (
+        <div>
+          <p>You are logged in.</p>
+          <button onClick={logout}>Logout</button>
         </div>
-      </form>
+      )}
     </div>
   );
-};
-
-export default Login;
+}
